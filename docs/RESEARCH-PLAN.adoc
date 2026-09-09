@@ -1,0 +1,54 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+= Residual Evidence Types: first research milestone
+:icons: font
+
+*Status: work in progress, 2026-09-09.* The imported assessment and explorer
+are the starting material. The separate Agda starter archive mentioned in
+the assessment is not included; its reported proofs have not been reproduced here.
+
+== Start with presence without identification
+
+Use the assessment's natural-number example `r = u + n = 2`.
+
+. Define `Candidate observe r E` as a world paired with observation equality
+  and evidence that the world satisfies `E`.
+. Make an inhabited case explicit, so an inconsistent set of assumptions
+  cannot become a useful warrant for every claim.
+. Define claims over every admissible candidate, and identification of a
+  query as agreement on its value across those candidates.
+. Exhibit `(0,2)` and `(2,0)` without a noise bound: the residual alone
+  does not establish presence of `u`.
+. Add `n ≤ 1`: prove `u` is nonzero, while `(1,1)` and `(2,0)` still prevent
+  identifying a unique value.
+. Keep the premise that the actual world belongs to the candidate set
+  separate from these model-relative results.
+
+Recover the original starter first if it is available. Otherwise label the
+new implementation and its checks as new work. An Agda module is only a
+checked result after the declared prover and options accept it; the explorer
+is only certified after a correspondence with its signed finite model is proved.
+
+== Compare before expanding
+
+The candidate object is an evidence-refined observation fibre. Compare its
+encoding against Echo Types and its claim obligations against Epistemic
+Types before introducing a new calculus. Presence, value identification,
+source identity and causal role remain distinct questions.
+
+Next, investigate dependency-preserving composition, revision and retraction
+of evidence, and correspondence with the finite explorer. A certified checker
+must account for the explorer's signed domain, bounds, retained observation
+and inconsistent cases. Candidate counts are not probabilities.
+
+== Ownership and shared meanings
+
+The residual definitions, examples, explorer, tests and proofs belong in this
+repository. The cross-project map, shared glossary and connection obligations
+belong in https://github.com/hyperpolymath/nextgen-typing[nextgen-typing].
+Echo's fibre/retention interfaces belong in `echo-types`; standpoint access,
+warrants and sound proof transport belong in `epistemic-types`.
+
+Confounding types remain a prospective causal specialisation. A causal model
+and identification assumptions must be supplied before that term becomes a
+formal interface or a claim about a hidden contribution.

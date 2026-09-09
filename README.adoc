@@ -83,6 +83,17 @@ The assessment's proposed next research steps are dependency-preserving
 composition, evidence revision and retraction, and a certified finite
 checker. Confounding types are a prospective causal specialisation.
 
+== Where to start
+
+link:docs/RESEARCH-PLAN.adoc[The first research milestone] is presence without
+identification: an inhabited evidence-refined fibre, explicit counterexamples,
+and the natural-number `r = u + n = 2` argument. Compare it with the existing
+Echo and Epistemic interfaces before expanding the calculus.
+
+https://github.com/hyperpolymath/nextgen-typing[nextgen-typing] coordinates
+the shared type-family map and glossary. Residual-specific models, proofs,
+tests and the explorer belong here.
+
 == Licensing
 
 The imported files retain their original SPDX notices: the assessment is
