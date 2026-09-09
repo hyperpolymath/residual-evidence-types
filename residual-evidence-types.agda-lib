@@ -1,0 +1,3 @@
+name: residual-evidence-types
+include: src
+flags: --safe --without-K

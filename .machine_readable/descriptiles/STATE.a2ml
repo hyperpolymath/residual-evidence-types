@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: MPL-2.0
+# SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+[metadata]
+project = "residual-evidence-types"
+last-updated = "2026-09-09"
+status = "work-in-progress"
+
+[implemented]
+core = "Builtins-only Agda: candidates, inhabited cases, universal claims, identification, refinement and actual-world soundness"
+example = "Natural-number presence without identification for u+n=2 and n<=1"
+explorer = "Imported standalone finite signed-integer JavaScript model"
+
+[local-verification]
+agda = "2.6.4.3"
+options = ["--safe", "--without-K", "--no-libraries", "--ignore-interfaces"]
+core = "passed"
+expected-rejections = ["FalsePresence", "FalseIdentification", "InconsistentCase"]
+echo-comparison = "passed; stdlib 2.1 emits UnsupportedIndexedMatch cubical-compatibility warnings"
+epistemic-comparison = "passed"
+receipt = "PROOF-STATUS.adoc"
+
+[pending]
+obligations = ["dependency-preserving composition", "evidence revision and retraction", "certified finite checker", "explorer correspondence", "causal specialisation"]

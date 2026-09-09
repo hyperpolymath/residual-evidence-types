@@ -7,6 +7,11 @@
 are the starting material. The separate Agda starter archive mentioned in
 the assessment is not included; its reported proofs have not been reproduced here.
 
+*First milestone completed locally:* the new Agda core checks the argument
+below, its counterexamples, and narrow comparisons with the actual Echo and
+Epistemic interfaces. See link:../PROOF-STATUS.adoc[the verification record].
+This plan's remaining work starts with composition and evidence revision.
+
 == Start with presence without identification
 
 Use the assessment's natural-number example `r = u + n = 2`.

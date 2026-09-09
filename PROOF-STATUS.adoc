@@ -1,0 +1,117 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+= Proof status — first residual milestone
+:toc:
+
+This is *new work written and checked on 2026-09-09*, not the missing starter
+archive described by the imported assessment. The project remains work in progress.
+
+== Local verification
+
+Agda 2.6.4.3 accepted the core and the two integration modules with
+`--safe --without-K --no-libraries --ignore-interfaces`.
+The core uses bundled builtins only. There are no postulates, unchecked
+termination overrides or holes in the accepted modules.
+
+[cols="2,3",options="header"]
+|===
+|Checked result |Evidence
+|Ordinary evidence-refined fibre encoding
+|`Core.from-to` and `Core.to-from`: both pointwise inverse laws.
+|Inhabited cases; claims quantify over every candidate
+|`Core.Case`, `Core.Holds`; claims are not limited to the chosen inhabitant.
+|Conditional actual-world soundness
+|`Core.actual-world-sound`: observation equality and evidence for the actual
+world remain required arguments.
+|Presence is unresolved without the bound
+|`Presence.residual-alone-does-not-imply-presence` and
+`Presence.residual-alone-does-not-imply-absence`, using `(0,2)` and `(2,0)`.
+|Bounded noise establishes presence
+|`Presence.bounded-presence`: for natural numbers, `u+n=2` and `n≤1` imply `u≠0`.
+|Presence does not identify the value
+|`Presence.bounded-value-not-identified`: `(1,1)` and `(2,0)` disagree on `u`.
+The generic `Core.different-candidates-refute-identification` supplies the argument.
+|Inconsistent constraints cannot supply a case
+|`Presence.conflict-has-no-candidate` and `Presence.conflict-has-no-case`:
+adding `u=0` to the bounded case is contradictory.
+|Identification is possible with stronger evidence
+|`Presence.no-noise-identifies-two`: adding `n=0` identifies `u=2`.
+This is a positive control for the identification definition.
+|Evidence refinement transports a conditional claim
+|`Core.refine-claim`: requires an inhabited new case and an implication from
+the new evidence to the old evidence. It does not invent consistency.
+|===
+
+Sources: link:src/ResidualEvidence/Core.agda[Core] and
+link:src/ResidualEvidence/Examples/Presence.agda[Presence example].
+
+== Expected rejections
+
+`just check` first type-checks the positive modules, then requires all three
+invalid modules to fail at their intended declarations:
+
+* `FalsePresence`: using the bounded theorem after dropping its evidence.
+* `FalseIdentification`: claiming every bounded candidate has `u=2`.
+* `InconsistentCase`: constructing a case whose witness violates the noise bound.
+
+The runner checks the diagnostic shape as well as the exit status. A missing
+module, parse error, unresolved name or unresolved hole does not count as a
+successful expected rejection. Diagnostic logs go to ignored `_build/check-logs/`.
+
+== Actual interface comparisons
+
+These modules import the actual sibling sources, not local copies of their
+interfaces. The checked Epistemic file is unchanged at the listed commit.
+The local Echo checkout has unpublished commits, so it is not used as a CI
+pin: the checked `Echo.agda` has Git blob `86745cd6d6fd683bb11360f43b0b37da32033c6e`,
+identical to the file at the published Echo revision below. Both published
+revisions are pinned in the CI workflow.
+
+[cols="1,2,3",options="header"]
+|===
+|Interface |Pinned source |Checked scope
+|Echo
+|`echo-types` commit `7a569b769975f2d634d48d7cc9c01110cc00e714`
+|link:tests/integration/EchoComparison.agda[EchoComparison]: candidate worlds
+round-trip through evidence over `Echo.Echo`. This checks the fibre packaging,
+not general composition, revision or an executable checker.
+|Epistemic
+|`epistemic-types` commit `3f4250f73899e6c797f6df01ac6eed8e3e3a1d7b`
+|link:tests/integration/EpistemicComparison.agda[EpistemicComparison]: a
+`SoundWarrant` whose evidence is a candidate-wide claim and whose conclusion
+requires explicit observation/evidence premises for the actual world.
+|Standard library for Echo
+|Agda stdlib 2.1, commit `97bc55e47367c562b3032bf104f2a00b19716f88`
+|Used only by the Echo integration. Agda emits `UnsupportedIndexedMatch`
+warnings in the library's `Relation.Nullary.Decidable` concerning cubical
+transport computation. The check succeeds; no cubical-computation claim is made.
+|===
+
+Run the integrations with explicit source directories:
+
+[source,bash]
+----
+just check
+just check-epistemic /path/to/epistemic-types/src
+just check-echo /path/to/echo-types/proofs/agda /path/to/agda-stdlib/src
+----
+
+The comparisons support treating this core as an ordinary evidence-refined
+fibre with a model-relative warrant interface. They do not establish a new
+primitive type or a distinct mathematical theory. The next research question
+is whether dependency-preserving composition and evidence revision add a
+useful interface beyond direct use of these foundations.
+
+== Remaining obligations
+
+* Dependency-preserving composition, evidence revision and retraction.
+* A certified finite checker and a proved correspondence with the signed
+  JavaScript explorer. The Agda example uses unbounded natural numbers;
+  the explorer uses bounded signed integers. They are different models.
+* Causal models, source identification and confounding semantics.
+* Probability or uncertainty distributions; counts remain counts.
+
+The imported assessment and explorer remain unchanged. Their historical
+claims about the separate starter package are not verification receipts for
+this repository. The CI workflow repeats this repository's actual checks;
+its run status must be consulted separately from local verification.

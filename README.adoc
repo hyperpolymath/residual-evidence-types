@@ -5,10 +5,10 @@
 
 [IMPORTANT]
 ====
-*Work in progress — early research.* This repository currently contains a
-research assessment and a finite JavaScript explorer. It does not yet contain
-the Agda library described by the assessment, a certified checker, or a proved
-connection between the explorer and a formal model. There is no stable API.
+*Work in progress — early research.* A new minimal Agda core now checks the
+presence-without-identification example and narrow comparisons with the actual
+Echo and Epistemic interfaces. The finite JavaScript explorer remains separate:
+there is no certified checker, proved explorer correspondence, or stable API.
 ====
 
 Research material for *evidence-indexed residual types*: representing the
@@ -68,12 +68,23 @@ the declared finite model. Candidate counts are not probabilities.
 
 == Current status and limits
 
-This initial import contains the assessment, the executable explorer, and
-this README. The assessment reports a larger starter archive with Agda
-modules, expected-rejection checks, behavioural tests, CI, an installer, and
-additional documentation. That archive is not part of these two source
-files and has not been imported here. Those reported proof and test results
-have not been reproduced as part of this import.
+The imported assessment and explorer are preserved unchanged. The assessment
+reports a separate starter archive that has not been recovered here. The
+`src/` core and `tests/` comparisons are *new work*, checked with Agda 2.6.4.3
+under `--safe --without-K`. They do not reproduce or authenticate the missing
+archive's claimed results.
+
+link:PROOF-STATUS.adoc[Proof status and reproducible commands] lists every
+checked result, the three expected-rejection controls, exact integration
+revisions and the standard-library warnings from the Echo comparison.
+
+[source,bash]
+----
+just check
+----
+
+The core check needs Agda and Just, and uses only Agda's builtins. Optional
+integration checks take explicit paths to the actual sibling source trees.
 
 In particular, the JavaScript explorer has no proved correspondence to an
 Agda implementation in this repository. The source's references to a starter
@@ -85,10 +96,10 @@ checker. Confounding types are a prospective causal specialisation.
 
 == Where to start
 
-link:docs/RESEARCH-PLAN.adoc[The first research milestone] is presence without
-identification: an inhabited evidence-refined fibre, explicit counterexamples,
-and the natural-number `r = u + n = 2` argument. Compare it with the existing
-Echo and Epistemic interfaces before expanding the calculus.
+link:docs/RESEARCH-PLAN.adoc[The research plan] starts with presence without
+identification. That first milestone and its narrow interface comparisons now
+check locally. Next, investigate dependency-preserving composition and evidence
+revision before expanding the calculus.
 
 https://github.com/hyperpolymath/nextgen-typing[nextgen-typing] coordinates
 the shared type-family map and glossary. Residual-specific models, proofs,

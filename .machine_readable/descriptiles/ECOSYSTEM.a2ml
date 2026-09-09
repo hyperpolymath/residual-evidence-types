@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: MPL-2.0
+# SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+[metadata]
+project = "residual-evidence-types"
+last-updated = "2026-09-09"
+
+[relationships]
+coordinator = "hyperpolymath/nextgen-typing"
+echo = "Actual fibre-packaging round trips checked in tests/integration/EchoComparison.agda"
+epistemic = "Actual SoundWarrant interface checked in tests/integration/EpistemicComparison.agda"
+scope = "Narrow interface comparisons only; no general composition or explorer certification"
