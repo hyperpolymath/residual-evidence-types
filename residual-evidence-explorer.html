@@ -1,0 +1,128 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Residual Evidence · finite explorer</title>
+  <style>
+    :root { color-scheme: light dark; --bg:#f5f3ee; --paper:#fffefb; --ink:#202d31; --muted:#48595e; --line:#b6c2c2; --accent:#075f64; --soft:#deeeeb; --warn:#7b3c14; }
+    * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:1rem/1.6 system-ui,sans-serif; }
+    main { max-width:1120px; margin:auto; padding:clamp(1rem,4vw,3rem); } h1 { font-size:clamp(2rem,6vw,3.7rem); line-height:1.1; letter-spacing:-.04em; margin:.5rem 0 1rem; }
+    h2 { font-size:1.35rem; margin:0 0 1rem; } h3 { font-size:1rem; margin:.5rem 0; } p { max-width:78ch; }
+    .eyebrow { font-size:.8rem; letter-spacing:.13em; font-weight:700; color:var(--accent); text-transform:uppercase; }
+    .intro { font-size:1.1rem; color:var(--muted); } .grid { display:grid; grid-template-columns:minmax(250px,1fr) minmax(0,1.6fr); gap:1.3rem; align-items:start; }
+    section { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:1.4rem; margin:1.3rem 0; } .grid section { margin:0; }
+    label { display:block; font-weight:650; margin-top:1rem; } input[type=range] { display:block; width:100%; min-height:44px; accent-color:var(--accent); }
+    input[type=checkbox] { width:1.15rem; height:1.15rem; vertical-align:middle; accent-color:var(--accent); } select,button { font:inherit; min-height:44px; border:1px solid var(--line); border-radius:7px; background:var(--paper); color:var(--ink); padding:.5rem .8rem; }
+    select { width:100%; } button { cursor:pointer; } button:hover { background:var(--soft); } :focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+    .presets { display:flex; flex-wrap:wrap; gap:.5rem; margin:1.3rem 0; } .equation { font:1.3rem ui-monospace,monospace; background:var(--soft); padding:1rem; border-radius:8px; overflow-wrap:anywhere; }
+    .result { border-left:4px solid var(--accent); padding:.3rem 1rem; margin-top:1rem; } .small { font-size:.9rem; color:var(--muted); } .count { font-weight:700; color:var(--accent); }
+    table { width:100%; border-collapse:collapse; } th,td { padding:.5rem .75rem; text-align:right; border-bottom:1px solid var(--line); } th:first-child,td:first-child { text-align:left; }
+    caption { text-align:left; margin:.5rem 0; font-weight:650; } .table-wrap { max-height:300px; overflow:auto; } details { margin-top:1rem; } summary { cursor:pointer; padding:.5rem 0; font-weight:650; }
+    a { color:var(--accent); } output { font-weight:700; } .note { color:var(--warn); } footer { font-size:.9rem; color:var(--muted); margin:1.5rem 0; }
+    @media (max-width:720px) { .grid { grid-template-columns:1fr; } section { padding:1rem; } }
+    @media (prefers-color-scheme:dark) { :root { --bg:#142226; --paper:#1c3034; --ink:#f0f5f2; --muted:#c4d5d4; --line:#647f82; --accent:#83e3ce; --soft:#254643; --warn:#ffd09d; } }
+  </style>
+</head>
+<body>
+<main>
+  <header><div class="eyebrow">A research instrument · v0.1</div><h1>Residual Evidence</h1>
+  <p class="intro">Something may contribute to an observation without being identifiable from it. Explore exactly what follows from a residual, a noise bound, and the distinctions you retain.</p></header>
+  <div class="presets" aria-label="Worked examples">
+    <button type="button" data-preset="ambiguous">1 · Residual alone</button><button type="button" data-preset="present">2 · Present, value unknown</button>
+    <button type="button" data-preset="exact">3 · Value identified</button><button type="button" data-preset="cancel">4 · Cancellation</button><button type="button" data-preset="conflict">5 · Conflicting assumptions</button>
+  </div>
+  <div class="grid">
+    <section aria-labelledby="assumptions-heading"><h2 id="assumptions-heading">Declare the model</h2>
+      <p class="equation">r = u + n</p><p class="small">r: residual · u: unresolved contribution · n: noise contribution. This additive model is an explicit assumption.</p>
+      <label for="residual">Residual r: <output id="residual-value" for="residual">2</output></label><input id="residual" type="range" min="-6" max="6" value="2" step="1">
+      <label for="bound">Assume |n| ≤ <output id="bound-value" for="bound">6</output></label><input id="bound" type="range" min="0" max="6" value="6" step="1" aria-describedby="bound-help">
+      <p id="bound-help" class="small">A chosen bound restricts this model. It is not evidence that real noise obeys it.</p>
+      <label for="view">Retained observation</label><select id="view"><option value="exact">Exact residual</option><option value="sign">Only its sign</option><option value="magnitude">Only its absolute magnitude</option></select>
+      <label><input id="assume-zero" type="checkbox"> Also assume u = 0</label>
+      <p class="small">The complete model domain is integer u and n from −6 to 6. No probabilities, independence, causal roles, or real-world measurements are supplied.</p>
+    </section>
+    <section aria-labelledby="claims-heading"><h2 id="claims-heading">What can you conclude?</h2>
+      <div id="results" aria-live="polite" aria-atomic="true"></div>
+      <details><summary>Inspect every compatible decomposition</summary><div class="table-wrap" tabindex="0" aria-label="Compatible decompositions"><table>
+        <caption>Candidate worlds in this finite model</caption><thead><tr><th scope="col">Candidate</th><th scope="col">u</th><th scope="col">n</th><th scope="col">u + n</th></tr></thead><tbody id="candidates"></tbody>
+      </table></div></details>
+    </section>
+  </div>
+  <section><h2>Why this matters</h2><p>“Present” asks whether every compatible world has a nonzero u. “Identified” asks whether they all agree on its value. Neither tells you the identity or causal role of a hidden source.</p>
+    <p>Try identifying u, then retaining only the residual’s absolute magnitude: the sign becomes unavailable. Try removing the noise bound: a previously justified presence claim may become unresolved. An empty set means the assumptions conflict; it does not make every claim true.</p>
+    <p class="note">These results are conditional on the declared finite model. Counting candidate worlds does not assign probabilities. The Agda example uses natural numbers; this signed example is separately tested JavaScript, with no proved extraction correspondence.</p>
+  </section>
+  <footer>Residual Evidence · model-relative reasoning · Code MPL-2.0 · No network requests or persistent data</footer>
+  <noscript><p>This explorer needs JavaScript. The README and EXPLAINME provide the worked examples as text.</p></noscript>
+</main>
+<script>
+// SPDX-License-Identifier: MPL-2.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+// Dependency-free finite model. This is an executable example, not extracted Agda.
+'use strict';
+globalThis.ResidualEvidence = (() => {
+  const LIMIT = 6;
+  const views = Object.freeze({ exact: x => x, sign: Math.sign, magnitude: Math.abs });
+  function makeCase({ residual = 2, noiseBound = 6, view = 'exact', assumeZero = false } = {}) {
+    if (!Number.isInteger(residual) || Math.abs(residual) > LIMIT) throw new RangeError('Residual must be an integer from -6 to 6.');
+    if (!Number.isInteger(noiseBound) || noiseBound < 0 || noiseBound > LIMIT) throw new RangeError('Noise bound must be an integer from 0 to 6.');
+    if (!Object.hasOwn(views, view)) throw new TypeError('Unknown observation view.');
+    if (typeof assumeZero !== 'boolean') throw new TypeError('assumeZero must be a Boolean.');
+    const observe = views[view];
+    const candidates = [];
+    for (let latent = -LIMIT; latent <= LIMIT; latent++) {
+      for (let noise = -LIMIT; noise <= LIMIT; noise++) {
+        if (Math.abs(noise) <= noiseBound && (!assumeZero || latent === 0) && observe(latent + noise) === observe(residual)) {
+          candidates.push(Object.freeze({ latent, noise }));
+        }
+      }
+    }
+    return Object.freeze({ model: 'signed-integer-v1', residual, noiseBound, view, assumeZero, candidates: Object.freeze(candidates) });
+  }
+  function decide(c, predicate) {
+    if (!c.candidates.length) return Object.freeze({ status: 'inconsistent', supporting: null, counterexample: null });
+    const supporting = c.candidates.find(predicate) ?? null;
+    const counterexample = c.candidates.find(w => !predicate(w)) ?? null;
+    return Object.freeze({ status: !counterexample ? 'entailed' : !supporting ? 'refuted' : 'unresolved', supporting, counterexample });
+  }
+  function identify(c, query) {
+    if (!c.candidates.length) return Object.freeze({ status: 'inconsistent', values: Object.freeze([]) });
+    const values = [...new Set(c.candidates.map(query))].sort((a, b) => a - b);
+    return Object.freeze({ status: values.length === 1 ? 'identified' : 'unidentified', values: Object.freeze(values) });
+  }
+  return Object.freeze({ LIMIT, makeCase, decide, identify });
+})();
+
+</script>
+<script>
+'use strict';
+const { makeCase, decide, identify } = globalThis.ResidualEvidence;
+const byId = id => document.getElementById(id);
+const presets = { ambiguous:[2,6,false], present:[2,1,false], exact:[2,0,false], cancel:[0,6,false], conflict:[2,1,true] };
+function textElement(tag,text,className='') { const el=document.createElement(tag); el.textContent=text; el.className=className; return el; }
+function render() {
+  const residual=Number(byId('residual').value), noiseBound=Number(byId('bound').value), view=byId('view').value;
+  byId('residual-value').value=residual; byId('bound-value').value=noiseBound;
+  const c=makeCase({residual,noiseBound,view,assumeZero:byId('assume-zero').checked});
+  const presence=decide(c,w=>w.latent!==0), identified=identify(c,w=>w.latent);
+  const results=byId('results'); results.replaceChildren(textElement('p',`${c.candidates.length} compatible candidate worlds`,'count'));
+  const block=(title,body)=>{const div=textElement('div','','result'); div.append(textElement('h3',title),textElement('p',body));results.append(div);};
+  if(presence.status==='inconsistent') block('Inconsistent assumptions','No world in this model satisfies all the constraints. Reconsider an assumption or the model domain; no presence or identification claim is issued.');
+  else {
+    const messages={entailed:'Every compatible world has a nonzero u. Presence follows within this model and under these assumptions.',refuted:'Every compatible world has u = 0. Absence follows within this model and under these assumptions.',unresolved:'Both zero and nonzero contributions remain possible. This evidence does not settle presence.'};
+    block(`Presence: ${presence.status}`,messages[presence.status]);
+    block(`Value: ${identified.status}`,`${identified.values.length===1?'The only compatible value is':'Compatible values are'} ${identified.values.join(', ')}.`);
+    if(presence.counterexample) {const w=presence.counterexample;block('Counterexample to a presence claim',`u = ${w.latent}, n = ${w.noise}; their sum ${w.latent+w.noise} matches the retained observation.`);}
+    block('Source identity and causal role: unresolved','This model has no source identities, treatment variables, or causal graph. A contribution value cannot establish a confounder, mediator, or hidden actor.');
+  }
+  const rows=byId('candidates');rows.replaceChildren();c.candidates.forEach((w,i)=>{const row=document.createElement('tr');[i+1,w.latent,w.noise,w.latent+w.noise].forEach(v=>row.append(textElement('td',String(v))));rows.append(row);});
+}
+for(const id of ['residual','bound','view','assume-zero']) byId(id).addEventListener('input',render);
+document.querySelectorAll('[data-preset]').forEach(button=>button.addEventListener('click',()=>{const [r,b,z]=presets[button.dataset.preset];byId('residual').value=r;byId('bound').value=b;byId('assume-zero').checked=z;byId('view').value='exact';render();}));
+render();
+</script>
+</body>
+</html>

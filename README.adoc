@@ -1,0 +1,81 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+= Residual Evidence Types
+:toc: macro
+
+Research material for *evidence-indexed residual types*: representing the
+alternative explanations compatible with an observation and its declared
+evidence, and keeping those evidence obligations attached to claims.
+
+The repository's canonical name is `hyperpolymath/residual-evidence-types`.
+The imported assessment uses the earlier proposed name `residual-evidence`;
+it is preserved unchanged as a source document.
+
+== Imported material
+
+Both source files were copied unchanged from the author's Windows Downloads
+folder on 2026-09-09.
+
+[cols="1,3",options="header"]
+|===
+|File |Contents
+|link:residual-evidence-assessment.md[Assessment and starting plan]
+|Research judgement, candidate-world formulation, prior-work references,
+worked example, proof ladder, and proposed implementation direction.
+|link:residual-evidence-explorer.html[Finite explorer]
+|A standalone HTML/CSS/JavaScript explorer of residual decomposition,
+presence, value identification, observation coarsening, cancellation, and
+inconsistent assumptions.
+|===
+
+== Core idea
+
+For a declared observation function `observe`, observation `r`, and evidence
+predicate `E`, a candidate is a world `w` together with evidence that
+`observe(w) = r` and `E(w)` holds. A warranted claim must hold for every
+admissible candidate. Applying it to reality additionally requires that the
+actual world belongs to that candidate set.
+
+For example, in the assessment's natural-number model `r = u + n = 2`,
+both `(u,n) = (0,2)` and `(2,0)` are initially possible. Assuming `n <= 1`
+establishes that `u` is nonzero, but leaves `(1,1)` and `(2,0)` possible.
+Presence can therefore be established without identifying a value.
+Neither conclusion by itself identifies a source or a causal role.
+
+The assessment positions the proposal as a formal library built from
+ordinary dependent constructions. Its literature-review and novelty
+judgements are source claims, not independently verified results of this
+import.
+
+== Open the explorer
+
+Open `residual-evidence-explorer.html` directly in a browser with JavaScript
+enabled. It is self-contained and requires no package installation or server.
+Use the five worked-example buttons, then change the residual, noise bound,
+retained observation, or additional zero-contribution assumption.
+
+The explorer uses signed integers `u,n` from -6 to 6, whereas the assessment's
+small proof example uses natural numbers. Its conclusions are conditional on
+the declared finite model. Candidate counts are not probabilities.
+
+== Current status and limits
+
+This initial import contains the assessment, the executable explorer, and
+this README. The assessment reports a larger starter archive with Agda
+modules, expected-rejection checks, behavioural tests, CI, an installer, and
+additional documentation. That archive is not part of these two source
+files and has not been imported here. Those reported proof and test results
+have not been reproduced as part of this import.
+
+In particular, the JavaScript explorer has no proved correspondence to an
+Agda implementation in this repository. The source's references to a starter
+README, `EXPLAINME`, and `START-HERE` describe that separate package.
+
+The assessment's proposed next research steps are dependency-preserving
+composition, evidence revision and retraction, and a certified finite
+checker. Confounding types are a prospective causal specialisation.
+
+== Licensing
+
+The imported files retain their original SPDX notices: the assessment is
+CC-BY-SA-4.0 and the explorer is MPL-2.0. This README is CC-BY-SA-4.0.
