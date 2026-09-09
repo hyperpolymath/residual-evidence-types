@@ -3,6 +3,14 @@
 = Residual Evidence Types
 :toc: macro
 
+[IMPORTANT]
+====
+*Work in progress — early research.* This repository currently contains a
+research assessment and a finite JavaScript explorer. It does not yet contain
+the Agda library described by the assessment, a certified checker, or a proved
+connection between the explorer and a formal model. There is no stable API.
+====
+
 Research material for *evidence-indexed residual types*: representing the
 alternative explanations compatible with an observation and its declared
 evidence, and keeping those evidence obligations attached to claims.
