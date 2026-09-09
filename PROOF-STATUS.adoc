@@ -6,6 +6,15 @@
 This is *new work written and checked on 2026-09-09*, not the missing starter
 archive described by the imported assessment. The project remains work in progress.
 
+== Hosted verification receipt
+
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/34400282291[GitHub Actions run 34400282291]
+completed successfully on 2026-09-09 for commit
+`4325198c10e2e689f084c2f64a27213685a1ffd2`. It accepted the core, rejected all
+three deliberately invalid modules, and accepted both interface comparisons
+using the published revisions pinned below. This receipt covers that exact
+revision; later changes need their own successful run.
+
 == Local verification
 
 Agda 2.6.4.3 accepted the core and the two integration modules with
