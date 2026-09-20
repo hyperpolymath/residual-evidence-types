@@ -16,30 +16,30 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@v6.0.2
       - name: Set up the checked Agda version
-        uses: wenkokke/setup-agda@52f1e708494c8717630b3e1378383b01a56a379c  # v2.5.0
+        uses: wenkokke/setup-agda@v2.5.0
         with:
           agda-version: '2.6.4.3'
           agda-stdlib-version: 'none'
       - name: Core proofs and expected rejections
         run: bash scripts/check.sh
       - name: Check out the compared Echo revision
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        uses: actions/checkout@v6.0.2
         with:
           repository: hyperpolymath/echo-types
           ref: 7a569b769975f2d634d48d7cc9c01110cc00e714
           path: _build/dependencies/echo-types
           persist-credentials: false
       - name: Check out the compared Epistemic revision
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        uses: actions/checkout@v6.0.2
         with:
           repository: hyperpolymath/epistemic-types
           ref: 3f4250f73899e6c797f6df01ac6eed8e3e3a1d7b
           path: _build/dependencies/epistemic-types
           persist-credentials: false
       - name: Check out standard library 2.1
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        uses: actions/checkout@v6.0.2
         with:
           repository: agda/agda-stdlib
           ref: 97bc55e47367c562b3032bf104f2a00b19716f88
