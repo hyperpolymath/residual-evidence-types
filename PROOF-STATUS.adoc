@@ -94,12 +94,12 @@ revisions are pinned in the CI workflow.
 |===
 |Interface |Pinned source |Checked scope
 |Echo
-|`echo-types` commit `7a569b769975f2d634d48d7cc9c01110cc00e714`
+|`echo-types` commit `9c4b72b52972c7e084c8f569635eb01caef64e7a`
 |link:tests/integration/EchoComparison.agda[EchoComparison]: candidate worlds
 round-trip through evidence over `Echo.Echo`. This checks the fibre packaging,
 not general composition, revision or an executable checker.
 |Epistemic
-|`epistemic-types` commit `3f4250f73899e6c797f6df01ac6eed8e3e3a1d7b`
+|`epistemic-types` commit `dd948fbdddbdd06282cda8425e3e644e013c11ff`
 |link:tests/integration/EpistemicComparison.agda[EpistemicComparison]: a
 `SoundWarrant` whose evidence is a candidate-wide claim and whose conclusion
 requires explicit observation/evidence premises for the actual world.
