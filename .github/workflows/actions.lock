@@ -6,19 +6,13 @@ workflows:
     '.github/workflows/main-estate-audit.yml':
         - 'hyperpolymath/cicd-suite@55556cf5ba71ba744695861503c13148d3915a5d'
     '.github/workflows/proofs.yml':
-        - 'actions/checkout@v6.0.2'
-        - 'wenkokke/setup-agda@v2.5.0'
+        - 'actions/checkout@v6.0.3'
 dependencies:
-    'actions/checkout@v6.0.2':
-        ref: 'v6.0.2'
-        commit: 'sha1-de0fac2e4500dabe0009e67214ff5f5447ce83dd'
+    'actions/checkout@v6.0.3':
+        ref: 'v6.0.3'
+        commit: 'sha1-df4cb1c069e1874edd31b4311f1884172cec0e10'
         owner_id: 44036562
         repo_id: 197814629
-    'wenkokke/setup-agda@v2.5.0':
-        ref: 'v2.5.0'
-        commit: 'sha1-52f1e708494c8717630b3e1378383b01a56a379c'
-        owner_id: 3983973
-        repo_id: 543706117
     'hyperpolymath/cicd-suite@55556cf5ba71ba744695861503c13148d3915a5d':
         ref: '55556cf5ba71ba744695861503c13148d3915a5d'
         commit: 'sha1-55556cf5ba71ba744695861503c13148d3915a5d'

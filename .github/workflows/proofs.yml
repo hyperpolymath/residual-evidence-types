@@ -3,49 +3,52 @@
 # SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
 name: Agda proofs
 
+# Recipe: the prover is Debian's agda package at the exact version the hosted
+# receipt in PROOF-STATUS.adoc cites, inside a digest-pinned image, and the
+# compared siblings are fetched by commit with plain git. No third-party action
+# is used. This repository's Actions posture is `selected`; the previous
+# recipe's wenkokke/setup-agda was refused before any job started
+# (startup_failure, jobs=0, every run since 2026-09-19). The only action below
+# is GitHub-owned.
+
 on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+env:
+  LANG: C.UTF-8
+  LC_ALL: C.UTF-8
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   proofs:
+    name: Core proofs, expected rejections and sibling comparisons
     runs-on: ubuntu-24.04
     timeout-minutes: 30
+    container: debian:13-slim@sha256:d7e12182ce18b85b93007c1dedf31f2d29e01ccf3182cc4017c709b6259bc132
     steps:
-      - uses: actions/checkout@v6.0.2
-      - name: Set up the checked Agda version
-        uses: wenkokke/setup-agda@v2.5.0
+      - name: Install authenticated Debian toolchain packages
+        run: |
+          apt-get update
+          apt-get install --no-install-recommends -y ca-certificates git agda-bin=2.6.4.3-1+b2
+      - uses: actions/checkout@v6.0.3
         with:
-          agda-version: '2.6.4.3'
-          agda-stdlib-version: 'none'
+          persist-credentials: false
+      - name: Verify the checked Agda version
+        run: test "$(agda --version)" = 'Agda version 2.6.4.3'
       - name: Core proofs and expected rejections
         run: bash scripts/check.sh
-      - name: Check out the compared Echo revision
-        uses: actions/checkout@v6.0.2
-        with:
-          repository: hyperpolymath/echo-types
-          ref: 7a569b769975f2d634d48d7cc9c01110cc00e714
-          path: _build/dependencies/echo-types
-          persist-credentials: false
-      - name: Check out the compared Epistemic revision
-        uses: actions/checkout@v6.0.2
-        with:
-          repository: hyperpolymath/epistemic-types
-          ref: 3f4250f73899e6c797f6df01ac6eed8e3e3a1d7b
-          path: _build/dependencies/epistemic-types
-          persist-credentials: false
-      - name: Check out standard library 2.1
-        uses: actions/checkout@v6.0.2
-        with:
-          repository: agda/agda-stdlib
-          ref: 97bc55e47367c562b3032bf104f2a00b19716f88
-          path: _build/dependencies/standard-library
-          persist-credentials: false
+      - name: Fetch the compared sibling revisions by commit
+        run: bash scripts/fetch-siblings.sh
       - name: Compare with the actual sibling interfaces
         run: |
-          agda --safe --without-K --no-libraries --ignore-interfaces -i src -i tests/integration -i _build/dependencies/epistemic-types/src tests/integration/EpistemicComparison.agda
-          agda --safe --without-K --no-libraries --ignore-interfaces -i src -i tests/integration -i _build/dependencies/echo-types/proofs/agda -i _build/dependencies/standard-library/src tests/integration/EchoComparison.agda
+          agda --safe --without-K --no-libraries --ignore-interfaces --double-check -i src -i tests/integration -i _build/dependencies/epistemic-types/src tests/integration/EpistemicComparison.agda
+          agda --safe --without-K --no-libraries --ignore-interfaces --double-check -i src -i tests/integration -i _build/dependencies/echo-types/proofs/agda -i _build/dependencies/standard-library/src tests/integration/EchoComparison.agda
