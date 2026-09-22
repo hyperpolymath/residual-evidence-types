@@ -3,6 +3,11 @@
 
 name: "🔴 GATE: Central Estate CI/CD Audit"
 
+# The called reusable declares `permissions: contents: read`; a caller must
+# grant at least what the reusable declares, and this grants exactly that.
+permissions:
+  contents: read
+
 on:
   push:
     branches: [ "main" ]
@@ -12,4 +17,13 @@ on:
 
 jobs:
   call-estate-audit:
-    uses: hyperpolymath/cicd-suite/.github/workflows/main-estate-audit.yml@main
+    # cicd-suite main, branch-reachable (main is ahead of this commit, never
+    # behind). Remote-form callee: its 26 gates reference
+    # hyperpolymath/cicd-suite/actions/*-check@0da816c0…, so actions.lock
+    # carries that commit as a transitive dependency; a dangling edge there
+    # creates zero jobs. Witnessed cross-repo in rsr-template-repo runs
+    # 35766280551 and 35282081912 (jobs spawn; the gates audit the calling
+    # repository). The previous `@main` form was absent from actions.lock, and
+    # a workflow absent from the lock dies at startup. Repin on callee updates;
+    # never to a PR-head commit (pull-ref-only reachability creates zero jobs).
+    uses: hyperpolymath/cicd-suite/.github/workflows/main-estate-audit.yml@55556cf5ba71ba744695861503c13148d3915a5d
