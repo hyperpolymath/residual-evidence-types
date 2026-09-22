@@ -37,6 +37,10 @@ world remain required arguments.
 `Presence.residual-alone-does-not-imply-absence`, using `(0,2)` and `(2,0)`.
 |Bounded noise establishes presence
 |`Presence.bounded-presence`: for natural numbers, `u+n=2` and `n≤1` imply `u≠0`.
+|Bounded noise warrants presence for the actual world
+|`Presence.bounded-warrants-actual-presence`: `observe actual ≡ 2` and
+`NoiseBound actual` yield `Present actual` by `Core.actual-world-sound`
+applied to `bounded-presence`; the observation and the bound stay explicit premises.
 |Presence does not identify the value
 |`Presence.bounded-value-not-identified`: `(1,1)` and `(2,0)` disagree on `u`.
 The generic `Core.different-candidates-refute-identification` supplies the argument.

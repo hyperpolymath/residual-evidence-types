@@ -5,7 +5,7 @@ set -euo pipefail
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
 prover="${AGDA:-agda}"
 "$prover" --version
-flags=(--safe --without-K --no-libraries --ignore-interfaces -i src)
+flags=(--safe --without-K --no-libraries --ignore-interfaces --double-check -i src)
 
 # Check the entire positive set first. Missing imports, broken tooling, and
 # unresolved holes must not turn into successful expected-rejection tests.

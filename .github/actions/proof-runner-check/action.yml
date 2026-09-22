@@ -1,0 +1,15 @@
+name: 'Proof Runner Gate'
+description: 'Runs the repository''s own proof runner and fails when the runner is absent or fails. A gate that finds no proofs is red, not green.'
+inputs:
+  runner:
+    description: 'Repository-relative path of the proof runner script.'
+    required: false
+    default: 'scripts/check.sh'
+runs:
+  using: 'composite'
+  steps:
+    - name: Run Proof Runner Check
+      shell: bash
+      env:
+        PROOF_RUNNER: ${{ inputs.runner }}
+      run: "${{ github.action_path }}/check.sh"
