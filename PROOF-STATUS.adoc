@@ -94,7 +94,7 @@ revisions are pinned in the CI workflow.
 |===
 |Interface |Pinned source |Checked scope
 |Echo
-|`echo-types` commit `7a569b769975f2d634d48d7cc9c01110cc00e714`
+|`echo-types` commit `9c4b72b52972c7e084c8f569635eb01caef64e7a`
 |link:tests/integration/EchoComparison.agda[EchoComparison]: candidate worlds
 round-trip through evidence over `Echo.Echo`. This checks the fibre packaging,
 not general composition, revision or an executable checker.
