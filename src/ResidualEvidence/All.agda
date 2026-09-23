@@ -6,3 +6,4 @@ module ResidualEvidence.All where
 
 import ResidualEvidence.Core
 import ResidualEvidence.Examples.Presence
+import ResidualEvidence.Context

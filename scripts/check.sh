@@ -11,8 +11,18 @@ flags=(--safe --without-K --no-libraries --ignore-interfaces --double-check -i s
 # unresolved holes must not turn into successful expected-rejection tests.
 "$prover" "${flags[@]}" src/ResidualEvidence/All.agda
 mkdir -p _build/check-logs
-for name in FalsePresence FalseIdentification InconsistentCase; do
-  file="tests/reject/$name.agda"
+
+# Every module under tests/reject is an expected rejection: one invalid
+# declaration per positive result. An empty set is a broken checkout, not a pass.
+shopt -s nullglob
+rejects=(tests/reject/*.agda)
+shopt -u nullglob
+if (( ${#rejects[@]} == 0 )); then
+  echo 'ERROR: no expected-rejection modules found under tests/reject' >&2
+  exit 1
+fi
+for file in "${rejects[@]}"; do
+  name="$(basename -- "$file" .agda)"
   log="_build/check-logs/$name.log"
   if "$prover" "${flags[@]}" -i tests/reject "$file" >"$log" 2>&1; then
     cat "$log"
@@ -30,4 +40,4 @@ for name in FalsePresence FalseIdentification InconsistentCase; do
   fi
   echo "PASS: rejected $name at its invalid declaration"
 done
-echo 'PASS: core proofs and all three expected rejections'
+echo "PASS: core proofs and all ${#rejects[@]} expected rejections"
