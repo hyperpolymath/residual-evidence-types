@@ -13,3 +13,5 @@ import ResidualEvidence.Composition
 import ResidualEvidence.Examples.Composition
 import ResidualEvidence.Finite.Checker
 import ResidualEvidence.Finite.Soundness
+import ResidualEvidence.Revision
+import ResidualEvidence.Examples.Revision
