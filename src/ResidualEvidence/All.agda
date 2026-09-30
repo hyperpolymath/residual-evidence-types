@@ -7,3 +7,5 @@ module ResidualEvidence.All where
 import ResidualEvidence.Core
 import ResidualEvidence.Examples.Presence
 import ResidualEvidence.Context
+import ResidualEvidence.Finite.Row
+import ResidualEvidence.Finite.Int
