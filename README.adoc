@@ -107,5 +107,10 @@ tests and the explorer belong here.
 
 == Licensing
 
-The imported files retain their original SPDX notices: the assessment is
-CC-BY-SA-4.0 and the explorer is MPL-2.0. This README is CC-BY-SA-4.0.
+Code, including the Agda modules, shell scripts and the JavaScript explorer,
+is link:LICENSE[Mozilla Public License 2.0] (`MPL-2.0`). Prose documentation,
+including this README, the assessment and the files under `docs/`, is
+`CC-BY-SA-4.0`. Both texts live in `LICENSES/`, and the per-file
+`SPDX-License-Identifier` headers are authoritative: the imported files keep
+their original notices (the assessment is CC-BY-SA-4.0, the explorer is
+MPL-2.0). The GitHub-detected licence is MPL-2.0 (the root `LICENSE`).
