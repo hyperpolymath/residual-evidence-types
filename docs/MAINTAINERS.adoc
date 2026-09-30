@@ -1,0 +1,56 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+= Maintainers
+:toc: preamble
+
+The maintainer roster for `hyperpolymath/residual-evidence-types`.
+
+== Current maintainers
+
+[cols="2,3,2",options="header"]
+|===
+| Name | Role | Contact
+
+| Jonathan D.A. Jewell
+| Lead Maintainer
+| https://github.com/hyperpolymath[@hyperpolymath]
+|===
+
+== Responsibilities
+
+The maintainer is responsible for:
+
+* reviewing and merging pull requests;
+* triaging issues and research questions;
+* keeping the proof record (`PROOF-STATUS.adoc`) accurate, with a hosted run
+  cited for every verification claim;
+* refreshing the pinned sibling revisions used by the integration checks;
+* responding to security reports.
+
+== Contribution process
+
+. Open an issue describing the change and what it should prove or fix.
+. Submit a pull request; the core checks, the expected rejections and the
+  sibling comparisons must pass in CI.
+. The maintainer reviews and merges.
+
+== Decision making
+
+With a single maintainer, decisions are made by that maintainer and recorded
+in the issue or pull request that carries them; see
+link:GOVERNANCE.adoc[GOVERNANCE.adoc] for the rules that bind those decisions.
+
+== Becoming a maintainer
+
+Contributors who show sustained, careful work on the proofs and the record may
+be invited to join the roster at the maintainer's discretion.
+
+== Contact
+
+Open an issue in this repository. For security matters, contact the maintainer
+privately through the GitHub profile above.
+
+== See also
+
+* link:GOVERNANCE.adoc[Governance]
+* link:RESEARCH-PLAN.adoc[Research plan]
