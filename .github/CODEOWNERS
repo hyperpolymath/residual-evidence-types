@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: MPL-2.0
+# CODEOWNERS — review assignments for hyperpolymath/residual-evidence-types.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# Caution: the repository's disabled "Optimus-Branch" ruleset carries
+# require_code_owner_review with an approving-review count of 2. A single
+# owner can approve pull requests from other authors, but cannot
+# approve their own. Add another owner before enabling this ruleset if needed.
+
+# Default owner for everything
+* @hyperpolymath
+
+# CI, composite checks and ruleset documents need explicit review
+.github/workflows/ @hyperpolymath
+.github/actions/ @hyperpolymath
+.github/rulesets/ @hyperpolymath
