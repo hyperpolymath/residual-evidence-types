@@ -4,8 +4,8 @@
 #
 # Caution: the repository's disabled "Optimus-Branch" ruleset carries
 # require_code_owner_review with an approving-review count of 2. Enabling it
-# while this file names a single owner would deadlock every pull request,
-# because an author's own approval never counts. Change one or the other first.
+# a single owner can approve pull requests from other authors, but cannot
+# approve their own. Add another owner before enabling this ruleset if needed.
 
 # Default owner for everything
 * @hyperpolymath
