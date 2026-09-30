@@ -29,7 +29,8 @@ The maintainer is responsible for:
 
 == Contribution process
 
-. Open an issue describing the change and what it should prove or fix.
+. For large changes, first open an issue describing the change and what it
+  should prove or fix. Routine changes do not require an issue.
 . Submit a pull request; the core checks, the expected rejections and the
   sibling comparisons must pass in CI.
 . The maintainer reviews and merges.

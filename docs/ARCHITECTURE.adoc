@@ -12,8 +12,10 @@ The repository holds a small Agda development of evidence-indexed residual
 types, the deliberately invalid modules that its gate must reject, narrow
 comparisons against two sibling Agda developments, and the research material
 (an assessment and a finite JavaScript explorer) that the proofs are being
-built to certify. Everything is checked by one script, `scripts/check.sh`,
-run inside a digest-pinned container in CI.
+built to certify. The core proof gate, `scripts/check.sh`, checks the positive
+proofs and expected rejections inside a digest-pinned container in CI. After
+fetching the sibling revisions, CI separately runs `EpistemicComparison.agda`
+and `EchoComparison.agda`.
 
 == Directory structure
 
