@@ -1,0 +1,76 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+= Governance
+:toc: preamble
+
+How decisions are made in `hyperpolymath/residual-evidence-types`, a
+single-maintainer research repository for evidence-indexed residual types.
+
+== Overview
+
+The repository is maintained by one person, listed in
+link:MAINTAINERS.adoc[MAINTAINERS.adoc]. There is no steering group and no
+vote: the maintainer decides, in the open, with the reasoning recorded in the
+issue or pull request that carries the change. Anyone may contribute, question
+a decision or propose a different one.
+
+== Roles
+
+=== Maintainer
+
+The maintainer:
+
+* reviews and merges pull requests;
+* triages issues and research questions;
+* keeps `PROOF-STATUS.adoc` and `RESEARCH-PLAN.adoc` honest about what is
+  proved, what is postulated and what is still open;
+* pins the sibling revisions (`echo-types`, `epistemic-types`) that the
+  integration checks compare against, and records each pin move with its own
+  successful run;
+* responds to security reports.
+
+=== Contributors
+
+Contributors are expected to:
+
+* open an issue before a large change, so the direction can be agreed first;
+* keep every Agda module under `--safe --without-K` and add a shape-checked
+  reject module under `tests/reject/` for each positive result;
+* update `PROOF-STATUS.adoc` when a theorem is added, weakened or removed;
+* keep documentation in AsciiDoc with an SPDX header on every file.
+
+== Decision making
+
+* *Routine changes* (typo fixes, documentation, dependency and pin refreshes)
+  are merged by the maintainer once the checks are green.
+* *Substantive changes* (new modules, changed theorem statements, changes to
+  `scripts/check.sh` or the workflows) need an issue or pull request
+  discussion that states what the change proves, what it stops proving and how
+  the gate catches the corresponding mistake.
+* *Claims about verification* are made only against a hosted run: a statement
+  in the README or `PROOF-STATUS.adoc` that something is checked must cite the
+  run identifier and the commit that it checked.
+* A finding raised by a scanner or a reviewer that is not a defect in the
+  change under review becomes an issue with acceptance criteria; it does not
+  block the change.
+
+== Proof discipline
+
+* Agda modules carry `{-# OPTIONS --safe --without-K #-}` and are checked with
+  `--double-check` inside a digest-pinned container.
+* Each positive module is paired with a reject module that must fail at a
+  named location; a reject module that passes is a bug in the gate.
+* Postulates and holes are not merged.
+
+== Communication
+
+* *Issues* for bugs, research questions and proposals.
+* *Pull requests* for changes, with the check output as the evidence.
+* *Security reports* by private message to the maintainer, never in a public
+  issue.
+
+== Licensing
+
+Code is licensed under MPL-2.0 and documentation under CC-BY-SA-4.0, as
+declared by the SPDX header at the top of each file. By submitting a pull
+request you agree to license your contribution under the same terms.
