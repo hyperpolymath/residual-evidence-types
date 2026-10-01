@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "residual-evidence-types"
+abstract: "Work in progress: evidence-indexed residual types; checked minimal Agda core, Echo/Epistemic comparisons and a separate finite explorer."
+authors:
+  - family-names: "Jewell"
+    given-names: "Jonathan D.A."
+    orcid: "https://orcid.org/0000-0002-3078-6652"
+repository-code: "https://github.com/hyperpolymath/residual-evidence-types"
+keywords:
+  - "echo-types"
+  - "epistemic-computing"
+  - "epistemic-infrastructure"
+  - "equivalence-aware-computing"
+  - "formal-verification"
+  - "hyperpolymath"
+  - "loss-taxonomy"
+  - "open-source"
+  - "proof-engineering"
+  - "reproducible-research"
+  - "research-software"
+  - "theorem-proving"
+  - "typed-provenance"
+  - "veridical-computing"
+  - "graded-transformations"
