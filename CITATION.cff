@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
-title: "residual-evidence-types"
+title: "Residual Evidence Types"
 abstract: "Work in progress: evidence-indexed residual types; checked minimal Agda core, Echo/Epistemic comparisons and a separate finite explorer."
 authors:
   - family-names: "Jewell"
