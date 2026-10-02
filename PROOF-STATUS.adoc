@@ -1,45 +1,67 @@
 // SPDX-License-Identifier: CC-BY-SA-4.0
 // SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
-= Proof status — first residual milestone
+= Proof status — residual evidence milestones
 :toc:
 
-This is *new work written and checked on 2026-09-09*, not the missing starter
-archive described by the imported assessment. The project remains work in progress.
+The first milestone (presence without identification) is *new work written and
+checked on 2026-09-09*, not the missing starter archive described by the
+imported assessment. The second milestone, landed between 2026-09-23 and
+2026-09-30, adds contexts of assumptions, dependency-preserving composition,
+evidence revision and retraction, a certified finite checker over the
+explorer's signed model, and a proved correspondence between that checker and
+the explorer. The project remains work in progress.
 
 == Hosted verification receipt
 
-https://github.com/hyperpolymath/residual-evidence-types/actions/runs/35781018563[GitHub Actions run 35781018563]
-completed successfully on 2026-09-22 for commit
-`938a7a5764ac18f08b1b7f332378b4d29c32aa37`. It accepted the core, rejected all
-three deliberately invalid modules, and accepted both interface comparisons
-using the published revisions pinned below, inside a digest-pinned Debian 13
-container with Agda 2.6.4.3 from the distribution package and `--double-check`
-on every invocation. This receipt covers that exact revision; later changes
-need their own successful run. The sibling pins were refreshed in
-https://github.com/hyperpolymath/residual-evidence-types/pull/7[PR #7], one
-commit per pin, each with its own successful run: 35780549433 with only the
-`echo-types` pin moved and 35780723650 with both.
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/36740394802[GitHub Actions run 36740394802]
+completed successfully on 2026-09-30 for commit `befdf9641c1bc6ecf58946e5ccbd0c630f4fc4c3`.
+Inside a digest-pinned Debian 13 container with Agda 2.6.4.3 from the
+distribution package and `--double-check` on every invocation, it:
 
-Earlier receipts, kept as history: run 35772400723 for commit
+* accepted every module reachable from `ResidualEvidence.All` (the core, the
+  context, composition, revision and finite-checker modules, and the three
+  worked examples);
+* rejected all nine deliberately invalid modules under `tests/reject` at their
+  intended declarations;
+* accepted both interface comparisons using the published revisions pinned
+  below; and
+* ran the explorer correspondence (`scripts/correspondence.sh`): bun 1.3.14,
+  installed from its release archive only after SHA-256 and SHA-512
+  verification, passed the 11 harness tests; the table regenerated from the
+  unchanged `residual-evidence-explorer.html` matched the committed
+  `ExplorerTable.agda` byte for byte; and Agda accepted
+  `Correspondence.checker-matches-explorer` by `refl`. That stage took
+  about 10 s of wall time.
+
+This receipt covers that exact revision; later changes need their own
+successful run.
+
+Earlier receipts, kept as history: run 35781018563 for commit
+`938a7a5764ac18f08b1b7f332378b4d29c32aa37` on 2026-09-22 checked the first
+milestone after the sibling pins were refreshed in
+https://github.com/hyperpolymath/residual-evidence-types/pull/7[PR #7] (one
+commit per pin, each with its own successful run: 35780549433 with only the
+`echo-types` pin moved and 35780723650 with both); run 35772400723 for commit
 `d571eae955ad549a7f13362dc9067c3689f179c0` on 2026-09-22 checked the same
-modules on the same container recipe with the previous sibling pins
-(`echo-types` `7a569b769975f2d634d48d7cc9c01110cc00e714`, `epistemic-types`
+modules with the previous sibling pins (`echo-types`
+`7a569b769975f2d634d48d7cc9c01110cc00e714`, `epistemic-types`
 `3f4250f73899e6c797f6df01ac6eed8e3e3a1d7b`); run 34400282291 for commit
-`4325198c10e2e689f084c2f64a27213685a1ffd2` on 2026-09-09 checked the same
-eight modules and the same three rejections. No run between those two started
-a job: the workflow then depended on a third-party action that this
+`4325198c10e2e689f084c2f64a27213685a1ffd2` on 2026-09-09 checked the original
+eight modules and three rejections. No run between 2026-09-09 and 2026-09-22
+started a job: the workflow then depended on a third-party action that this
 repository's Actions allow-list refuses, so every run from 2026-09-19 ended in
 `startup_failure` with zero jobs. The current workflow uses no third-party
-action.
+action beyond `actions/checkout`.
 
 == Local verification
 
-Agda 2.6.4.3 accepted the core and the two integration modules with
+Agda 2.6.4.3 accepts every module with
 `--safe --without-K --no-libraries --ignore-interfaces`.
-The core uses bundled builtins only. There are no postulates, unchecked
+The modules use bundled builtins only. There are no postulates, unchecked
 termination overrides or holes in the accepted modules.
 
-[cols="2,3",options="header"]
+=== First milestone: presence without identification
+
 |===
 |Checked result |Evidence
 |Ordinary evidence-refined fibre encoding
@@ -75,14 +97,162 @@ the new evidence to the old evidence. It does not invent consistency.
 Sources: link:src/ResidualEvidence/Core.agda[Core] and
 link:src/ResidualEvidence/Examples/Presence.agda[Presence example].
 
+=== Contexts of assumptions
+
+Evidence is a context `Ctx W = List (W → Set)`, interpreted as the product of
+its assumptions, with order-preserving thinnings `Δ ⊆ Γ` between contexts.
+
+[cols="2,3",options="header"]
+|===
+|Checked result |Evidence
+|Evidence restricts along a thinning
+|`Context.weaken`: a thinning `Δ ⊆ Γ` maps evidence for `Γ` to evidence for `Δ`.
+|Cases and claims move in the right directions
+|`Context.case-weaken` (a case under more assumptions is a case under fewer) and
+`Context.claim-strengthen` (a claim under fewer assumptions holds under more,
+via `Core.refine-claim`).
+|Nothing thins into the empty context from nothing
+|`Context.no-thinning-into-empty`: a non-empty context has no thinning into `[]`.
+|===
+
+Source: link:src/ResidualEvidence/Context.agda[Context].
+
+=== Dependency-preserving composition
+
+[cols="2,3",options="header"]
+|===
+|Checked result |Evidence
+|Concatenated evidence splits and rejoins exactly
+|`Composition.join-split` and `Composition.split-join`: both inverse laws for
+`Γ ++ Δ`; `split-is-weaken-left` and `split-is-weaken-right` identify the
+projections with thinnings.
+|Claims compose without inventing consistency
+|`Composition.compose-claims`: the composed case is an explicit argument, never
+derived from the two components; `component-left` and `component-right`
+recover each component case.
+|Paired observations are an ordinary fibre
+|`Composition.pair-from-to` and `Composition.pair-to-from`: both inverse laws
+between candidates of a paired observation and pairs of candidates.
+|Coarsening transfers claims in one direction only
+|`Composition.coarsen-candidate`, `coarsen-case` and `coarsen-claim`: a coarse
+claim transfers to the fine observation, not the other way.
+|Worked example
+|`Examples.Composition.present-and-two`: `[NoiseBound] ++ [NoNoise]` yields
+presence and `u ≡ 2`; `coarsening-forgets-presence`: under the coarse
+"positive or not" observation the silent candidate `(0,1)` is admitted.
+|===
+
+Sources: link:src/ResidualEvidence/Composition.agda[Composition] and
+link:src/ResidualEvidence/Examples/Composition.agda[Composition example].
+
+=== Evidence revision and retraction
+
+Refutation and disagreement are constructive witnesses, not negations of
+`Holds`, so they survive `--safe` and transport along retractions.
+
+[cols="2,3",options="header"]
+|===
+|Checked result |Evidence
+|Constructive refutation implies the negative
+|`Revision.refuted-not-holds` and `Revision.disagreeing-not-identified`.
+|Retraction is a thinning with its own inverse laws
+|`Revision.retract-⊆`, `retract-join-split`, `retract-split-join` and
+`retract-is-weaken`.
+|What survives a retraction
+|`Revision.retract-case`, `refuted-retract`, `disagreeing-retract`;
+`survives-retraction` for a claim whose support is kept, and
+`dependent-holds` / `survives-dependent` for claims that rest on named assumptions.
+|Revision replaces an assumption
+|`Revision.replace-head` and `Revision.revise`: the revised case is an explicit
+argument.
+|Worked example
+|`Examples.Revision.presence-survives` retracting `NoNoise`, while
+`identification-lost` and `identification-not-recovered` show the value is no
+longer identified; `presence-refuted` after retracting `NoiseBound`, via the
+witness `(0,2)`; `balanced-identifies-one` after revision; `no-revised-case`
+when the revised assumptions are inconsistent.
+|===
+
+Sources: link:src/ResidualEvidence/Revision.agda[Revision] and
+link:src/ResidualEvidence/Examples/Revision.agda[Revision example].
+
+=== Certified finite checker
+
+The checker works over the explorer's own model: signed integers `u, n` in
+−6..6, a noise bound 0..6, the three observation views (exact, sign,
+magnitude) and the optional assumption that the latent is zero, giving 546
+configurations. `Checker.Evidence cfg` is a three-assumption context, so the
+in-range condition the explorer hides inside its loop bounds is an explicit
+premise here.
+
+[cols="2,3",options="header"]
+|===
+|Checked result |Evidence
+|Integer arithmetic and the range
+|`Finite.Int.range-sound` and `range-complete`: `range` is exactly −6..6.
+|Admissibility is decided correctly
+|`Finite.Soundness.admits-sound` and `admits-complete`.
+|Enumeration is exactly the admissible in-range worlds
+|`Finite.Soundness.enumerate-sound` and `enumerate-complete`.
+|Every presence verdict is sound
+|`entailed-sound`, `refuted-sound`, `unresolved-sound` and
+`inconsistent-sound`; `entailed-complete` for the converse of entailment.
+|Identification verdicts are sound
+|`identified-sound`, `unidentified-sound` and `unidentified-refutes`.
+|A finite verdict reaches an actual world only under all three assumptions
+|`Finite.Soundness.finite-actual-sound`: observation equality, the in-range
+condition, the noise bound and (if assumed) the zero latent are all explicit
+premises, discharged through `Core.actual-world-sound`.
+|===
+
+Sources: link:src/ResidualEvidence/Finite/Int.agda[Int],
+link:src/ResidualEvidence/Finite/Row.agda[Row],
+link:src/ResidualEvidence/Finite/Checker.agda[Checker] and
+link:src/ResidualEvidence/Finite/Soundness.agda[Soundness].
+
+=== Explorer correspondence
+
+`just correspondence` runs `scripts/correspondence.sh`, separately from the
+fast `just check`:
+
+. `bun test tests/correspondence`: the harness loads the model from the
+  unchanged `residual-evidence-explorer.html` and checks its identity, the
+  order of the 546 configurations, hand-derived known-answer rows and the
+  shape of the emitted table.
+  The script asserts exactly 11 passing tests and none failing, because
+  `bun test` exits 0 when it finds no tests.
+. `generate-table.js` regenerates `ExplorerTable.agda` (546 rows) and `diff -u`
+  requires it to equal the committed table byte for byte.
+. `Correspondence.checker-matches-explorer : table ≡ expected` is proved by
+  `refl`: the certified checker and the explorer agree on all 546
+  configurations, row by row.
+
+This certifies the checker against the explorer. It does not relate the
+explorer to the first milestone's `Core` example, which uses unbounded natural
+numbers where the explorer uses bounded signed integers: they remain
+different models.
+
+Source: link:tests/correspondence/Correspondence.agda[Correspondence].
+
 == Expected rejections
 
-`just check` first type-checks the positive modules, then requires all three
-invalid modules to fail at their intended declarations:
+`just check` first type-checks the positive modules, then requires every
+module under `tests/reject` to fail at its intended declaration:
 
 * `FalsePresence`: using the bounded theorem after dropping its evidence.
 * `FalseIdentification`: claiming every bounded candidate has `u=2`.
 * `InconsistentCase`: constructing a case whose witness violates the noise bound.
+* `FalseWeakening`: reading a thinning backwards, which would manufacture a
+  noise bound out of no assumption.
+* `FalseCoarsening`: transferring a fine claim to the coarse observation, which
+  also admits the silent `(0,1)`.
+* `FalseRetraction`: keeping presence after retracting `NoiseBound`, the
+  assumption it rests on.
+* `FalseIntEquality`: deciding that −1 and 1 are equal.
+* `FalseFiniteEntailment`: claiming entailment where the checker refutes
+  presence (residual 2, bound 6, exact view, zero latent assumed).
+* `FalseFiniteSoundness`: transferring a finite verdict to an actual world
+  without the in-range premise.
 
 The runner checks the diagnostic shape as well as the exit status. A missing
 module, parse error, unresolved name or unresolved hole does not count as a
@@ -134,12 +304,11 @@ useful interface beyond direct use of these foundations.
 
 == Remaining obligations
 
-* Dependency-preserving composition, evidence revision and retraction.
-* A certified finite checker and a proved correspondence with the signed
-  JavaScript explorer. The Agda example uses unbounded natural numbers;
-  the explorer uses bounded signed integers. They are different models.
 * Causal models, source identification and confounding semantics.
 * Probability or uncertainty distributions; counts remain counts.
+* Whether composition and revision add a useful interface beyond direct use
+  of the Echo and Epistemic foundations; the comparisons above check the
+  first milestone only.
 
 The imported assessment and explorer remain unchanged. Their historical
 claims about the separate starter package are not verification receipts for

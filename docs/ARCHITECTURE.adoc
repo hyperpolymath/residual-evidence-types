@@ -1,0 +1,84 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+= Architecture
+:toc: preamble
+
+How `hyperpolymath/residual-evidence-types` is laid out and how its checks fit
+together.
+
+== Overview
+
+The repository holds a small Agda development of evidence-indexed residual
+types, the deliberately invalid modules that its gate must reject, narrow
+comparisons against two sibling Agda developments, and the research material
+(an assessment and a finite JavaScript explorer) that the proofs are being
+built to certify. The core proof gate, `scripts/check.sh`, checks the positive
+proofs and expected rejections inside a digest-pinned container in CI. After
+fetching the sibling revisions, CI separately runs `EpistemicComparison.agda`
+and `EchoComparison.agda`.
+
+== Directory structure
+
+[source]
+----
+.
+├── src/ResidualEvidence/            # the Agda development (--safe --without-K)
+│   ├── Prelude.agda                 #   minimal logical vocabulary
+│   ├── Core.agda                    #   candidate worlds, evidence, claims
+│   ├── Context.agda                 #   contexts of assumptions and thinnings
+│   ├── Examples/Presence.agda       #   presence without identification
+│   └── All.agda                     #   imports every positive module
+├── tests/reject/                    # one module per expected rejection
+├── tests/integration/               # comparisons with echo-types and epistemic-types
+├── scripts/                         # check.sh (the gate), fetch-siblings.sh
+├── docs/                            # research plan and governance documents
+├── .github/workflows/               # proofs.yml, main-estate-audit.yml, actions.lock
+├── .github/actions/                 # composite checks used by the estate audit
+├── .github/rulesets/                # ruleset documents (applied separately)
+├── .machine_readable/               # machine-readable project descriptors
+├── residual-evidence-explorer.html  # the finite explorer, kept as imported
+├── residual-evidence-assessment.md  # the imported assessment
+├── residual-evidence-types.agda-lib # library file: include src, --safe --without-K
+├── Justfile                         # check, check-echo, check-epistemic, fetch-siblings
+├── PROOF-STATUS.adoc                # what is proved, with hosted-run receipts
+└── README.adoc
+----
+
+== The gate
+
+`scripts/check.sh` runs Agda 2.6.4.3 with `--safe --without-K --no-libraries
+--ignore-interfaces --double-check` over `src/ResidualEvidence/All.agda`, so
+every positive module is checked from source on every run. It then checks
+each module under `tests/reject/` and demands that Agda fail at a location
+inside that module with a `when checking that` explanation, so a reject
+module that is merely missing an import or has a parse error does not count
+as a rejection. The script prints one `PASS` line per rejection and a final
+line naming the number of rejections it expected.
+
+== Continuous integration
+
+`.github/workflows/proofs.yml` runs the gate in a digest-pinned
+`debian:13-slim` container and installs `agda-bin` from the distribution
+package rather than through a third-party action, so the workflow does not
+depend on the repository's action allow-list. The sibling comparisons check
+out `echo-types` and `epistemic-types` at revisions pinned by full SHA in the
+workflow; a pin is moved in its own commit with its own successful run, and
+the run is cited in `PROOF-STATUS.adoc`.
+
+`.github/workflows/main-estate-audit.yml` calls the estate-wide audit, which
+runs the composite checks under `.github/actions/`.
+
+== Dependencies
+
+* `echo-types` and `epistemic-types`, pinned by SHA in `proofs.yml`; only the
+  integration modules import them.
+* `agda-stdlib` 2.1 for the echo comparison; the core imports only
+  `Agda.Builtin` modules.
+
+== Design constraints
+
+* `--safe --without-K` everywhere; no postulates, no holes.
+* `Core.agda` and `Prelude.agda` change only together with the pinned
+  receipts, because the integration modules open both.
+* A new result arrives as a positive module, a reject module and an entry in
+  `PROOF-STATUS.adoc`, in the same pull request.

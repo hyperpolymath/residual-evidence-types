@@ -3,14 +3,18 @@
 = Residual Evidence Types: first research milestone
 :icons: font
 
-*Status: work in progress, 2026-09-09.* The imported assessment and explorer
+*Status: work in progress, 2026-09-30.* The imported assessment and explorer
 are the starting material. The separate Agda starter archive mentioned in
 the assessment is not included; its reported proofs have not been reproduced here.
 
-*First milestone completed locally:* the new Agda core checks the argument
+*First milestone checked (2026-09-09):* the new Agda core checks the argument
 below, its counterexamples, and narrow comparisons with the actual Echo and
-Epistemic interfaces. See link:../PROOF-STATUS.adoc[the verification record].
-This plan's remaining work starts with composition and evidence revision.
+Epistemic interfaces.
+
+*Second milestone checked (2026-09-30):* contexts of assumptions,
+dependency-preserving composition, evidence revision and retraction, and a
+certified finite checker proved to agree with the explorer on all 546
+configurations. See link:../PROOF-STATUS.adoc[the verification record].
 
 == Start with presence without identification
 
@@ -31,8 +35,9 @@ Use the assessment's natural-number example `r = u + n = 2`.
 
 Recover the original starter first if it is available. Otherwise label the
 new implementation and its checks as new work. An Agda module is only a
-checked result after the declared prover and options accept it; the explorer
-is only certified after a correspondence with its signed finite model is proved.
+checked result after the declared prover and options accept it; the explorer's
+verdicts are backed only through the proved correspondence between it and the
+certified finite checker over its signed model (`just correspondence`).
 
 == Compare before expanding
 
@@ -41,10 +46,12 @@ encoding against Echo Types and its claim obligations against Epistemic
 Types before introducing a new calculus. Presence, value identification,
 source identity and causal role remain distinct questions.
 
-Next, investigate dependency-preserving composition, revision and retraction
-of evidence, and correspondence with the finite explorer. A certified checker
-must account for the explorer's signed domain, bounds, retained observation
-and inconsistent cases. Candidate counts are not probabilities.
+The second milestone added dependency-preserving composition, revision and
+retraction of evidence, and a certified checker that accounts for the
+explorer's signed domain, bounds, retained observation and inconsistent cases,
+with the in-range condition as an explicit premise. Candidate counts are not
+probabilities. The open question is whether composition and revision add an
+interface beyond direct use of the Echo and Epistemic foundations.
 
 == Ownership and shared meanings
 

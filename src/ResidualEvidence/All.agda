@@ -9,3 +9,9 @@ import ResidualEvidence.Examples.Presence
 import ResidualEvidence.Context
 import ResidualEvidence.Finite.Row
 import ResidualEvidence.Finite.Int
+import ResidualEvidence.Composition
+import ResidualEvidence.Examples.Composition
+import ResidualEvidence.Finite.Checker
+import ResidualEvidence.Finite.Soundness
+import ResidualEvidence.Revision
+import ResidualEvidence.Examples.Revision

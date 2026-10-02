@@ -22,3 +22,8 @@ fetch-siblings:
 check-all: check fetch-siblings
     just check-epistemic _build/dependencies/epistemic-types/src
     just check-echo _build/dependencies/echo-types/proofs/agda _build/dependencies/standard-library/src
+
+# Explorer correspondence: bun harness, table drift diff, and the refl proof
+# that the certified checker agrees with the explorer on all 546 configurations.
+correspondence:
+    bash scripts/correspondence.sh
