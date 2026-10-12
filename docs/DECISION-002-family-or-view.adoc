@@ -1,0 +1,49 @@
+= DECISION-002 — Is residual-evidence a family or a view on Echo + Epistemic?
+:revdate: 2026-10-12
+
+PROOF-STATUS asks whether composition and revision add an interface beyond
+Echo + Epistemic. This record makes the question decidable and runs the
+half of it that can be run from the other side.
+
+== Run: the view half (epistemic-types `Kripke/Residual.agda`)
+
+* `Holds c P` is a Kripke `Box` over "w′ is a candidate" — the Echo fibre
+  over the reading, cut down by the evidence. By definition.
+* The four verdicts are the joint cases of `Box P` and `Box (¬ P)`.
+* "Presence without identification" is de dicto without de re, and is
+  witnessed there in nine lines.
+
+So `Core.Holds`, `Verdict` and the thesis sentence of the README are a
+*view*: Epistemic (indexed) over Echo states them.
+
+== Pending: the family half — three tests, each a theorem to attempt here
+
+. *Dependence.* `Dependent ctx P` ("the verdict rests on this evidence")
+  is not a function of the candidate set. Test: two contexts with pointwise
+  logically equivalent `⟦_⟧` whose `Dependent` differs. If such a pair
+  exists, dependence is structure the frame forgets — a justification-logic
+  interface, and a family. Falsifier: `Dependent` provably factors
+  through `⟦_⟧`.
+. *Composition.* The laws in `Composition.agda` transport to Echo's
+  fibre composition (PROOF-STATUS's planned comparison). If every law is
+  an instance of an Echo law, composition is a view.
+. *Revision.* `Revision.agda` transports to warrant revision in Epistemic.
+  Same criterion.
+
+== Test 1, run (in a mirror): PASSES
+
+epistemic-types `Kripke/Dependence.agda` mirrors `Dependent` (support ⊆ Γ,
+claim over the thinned context) and shows `[P]` and `[P, P]` have the same
+candidates pointwise while only the second admits a *proper* support. A
+box sees worlds; dependence sees assumptions. Expected outcome: *family* —
+the interface residual-evidence adds is justification structure. To be
+re-proved against this repo's own record (the mirror is the same shape;
+`drop (keep done)` is the support). Tests 2–3 remain as recorded.
+
+== Decision rule (pre-registered)
+
+Family if test 1 passes, or if either of tests 2–3 yields a law with no
+Echo/Epistemic counterpart. Otherwise merge: keep the reject controls (they
+are good falsifiers either way) and fold the definitions into Epistemic as
+the "residual frame". Either outcome is completion; the status that is not
+acceptable is "undecided".
