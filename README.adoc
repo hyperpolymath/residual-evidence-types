@@ -69,7 +69,13 @@ the declared finite model. Candidate counts are not probabilities.
 
 == Current status and limits
 
-2026-10-12: the family-or-view question is decided in favour of *family* — dependence (which assumptions a verdict rests on) is not a function of the candidate set; see link:docs/DECISION-002-family-or-view.adoc[]. `Holds`, the verdicts and the thesis sentence are a view on Epistemic over Echo; dependence and revision are the interface.
+2026-10-12: the expected outcome of the family-or-view question is *family*.
+The mirror proves that dependence (which assumptions a verdict rests on) is
+not a function of the candidate set; this result still needs to be re-proved
+against this repository's own record. See
+link:docs/DECISION-002-family-or-view.adoc[]. `Holds`, the verdicts and the
+thesis sentence are a view on Epistemic over Echo. Dependence is the proposed
+additional interface; composition and revision transport remain pending.
 
 The imported assessment and explorer are preserved unchanged. The assessment
 reports a separate starter archive that has not been recovered here. The
