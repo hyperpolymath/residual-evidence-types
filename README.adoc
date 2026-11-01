@@ -71,11 +71,20 @@ the declared finite model. Candidate counts are not probabilities.
 
 2026-10-12: the expected outcome of the family-or-view question is *family*.
 The mirror proves that dependence (which assumptions a verdict rests on) is
-not a function of the candidate set; this result still needs to be re-proved
-against this repository's own record. See
+not a function of the candidate set. See
 link:docs/DECISION-002-family-or-view.adoc[]. `Holds`, the verdicts and the
 thesis sentence are a view on Epistemic over Echo. Dependence is the proposed
-additional interface; composition and revision transport remain pending.
+additional interface; composition and revision transport are now checked
+(2026-11-01): both extend beyond the Echo.Echo and SoundWarrant interfaces
+(see link:PROOF-STATUS.adoc[] for the checked result and the precise
+missing-interface statements).
+
+2026-11-01: the dependence result is now re-proved against this repository's
+own record (`src/ResidualEvidence/Dependence.agda`, Grade 3, Agda-only, no
+import of the mirror): two contexts with pointwise logically equivalent
+candidate sets differ in what a claim can be made to rest on. All three
+family tests of DECISION-002 are checked; the family-or-view question is
+decided *family*.
 
 The imported assessment and explorer are preserved unchanged. The assessment
 reports a separate starter archive that has not been recovered here. The
@@ -111,9 +120,10 @@ specialisation.
 
 link:docs/RESEARCH-PLAN.adoc[The research plan] starts with presence without
 identification. That first milestone, its interface comparisons, composition,
-revision and the certified finite checker now check in CI. Next, decide whether
+revision and the certified finite checker now check in CI. Whether
 composition and revision add an interface beyond the Echo and Epistemic
-foundations before expanding the calculus.
+foundations is now checked (2026-11-01): both extend beyond the interfaces;
+see link:PROOF-STATUS.adoc[] before expanding the calculus.
 
 https://github.com/hyperpolymath/nextgen-typing[nextgen-typing] coordinates
 the shared type-family map and glossary. Residual-specific models, proofs,

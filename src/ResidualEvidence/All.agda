@@ -15,3 +15,5 @@ import ResidualEvidence.Finite.Checker
 import ResidualEvidence.Finite.Soundness
 import ResidualEvidence.Revision
 import ResidualEvidence.Examples.Revision
+import ResidualEvidence.Beyond
+import ResidualEvidence.Dependence

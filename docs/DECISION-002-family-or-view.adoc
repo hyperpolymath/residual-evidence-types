@@ -1,5 +1,5 @@
 = DECISION-002 — Is residual-evidence a family or a view on Echo + Epistemic?
-:revdate: 2026-10-12
+:revdate: 2026-11-01
 
 PROOF-STATUS asks whether composition and revision add an interface beyond
 Echo + Epistemic. This record makes the question decidable and runs the
@@ -16,7 +16,7 @@ half of it that can be run from the other side.
 So `Core.Holds`, `Verdict` and the thesis sentence of the README are a
 *view*: Epistemic (indexed) over Echo states them.
 
-== Pending: the family half — three tests, each a theorem to attempt here
+== The family half — three tests, each a theorem to attempt here
 
 . *Dependence.* `Dependent ctx P` ("the verdict rests on this evidence")
   is not a function of the candidate set. Test: two contexts with pointwise
@@ -30,15 +30,61 @@ So `Core.Holds`, `Verdict` and the thesis sentence of the README are a
 . *Revision.* `Revision.agda` transports to warrant revision in Epistemic.
   Same criterion.
 
-== Test 1, run (in a mirror): PASSES
+== Test 1, run (in a mirror and in this repository): PASSES
 
 epistemic-types `Kripke/Dependence.agda` mirrors `Dependent` (support ⊆ Γ,
 claim over the thinned context) and shows `[P]` and `[P, P]` have the same
 candidates pointwise while only the second admits a *proper* support. A
 box sees worlds; dependence sees assumptions. Expected outcome: *family* —
-the interface residual-evidence adds is justification structure. To be
-re-proved against this repo's own record (the mirror is the same shape;
-`drop (keep done)` is the support). Tests 2–3 remain as recorded.
+the interface residual-evidence adds is justification structure.
+
+Re-proved against this repository's own record in
+link:../src/ResidualEvidence/Dependence.agda[Dependence] (Grade 3,
+Agda-only, no import of the mirror): the witness pair is the same
+(`Γ₁ = P ∷ []`, `Γ₂ = P ∷ P ∷ []`, `P u = ⊤`, `P v = ⊥`), the
+same-candidates equivalence is pointwise, `properly-in-Γ₂` names the
+support `P ∷ []` with the thinning `drop (keep done)`, and
+`not-properly-in-Γ₁` shows the only proper support (the empty context,
+`drop done`) makes the claim fail at `v` (`P v = ⊥`), while `keep done`
+is not proper at all. Checked with `--safe --without-K --double-check`
+(Agda 2.6.4.1); no axioms beyond the Agda builtins.
+
+== Test 2, run (in this repository): yields a law with no Echo counterpart
+
+The composition laws were checked against the pinned Echo.Echo interface
+(echo-types @ `9c4b72b52972c7e084c8f569635eb01caef64e7a`) in
+link:../src/ResidualEvidence/Beyond.agda[Beyond], with a faithful
+ordinary-type encoding of `Echo.Echo` — no cross-repository build
+dependency. `Echo.Echo observe r = Σ W (observe w ≡ r)` carries no evidence
+predicate, no context of assumptions and no claims; its laws (map-over,
+`Echo-comp-iso`, `cancel-iso`, map-square, pentagon) compose *functions*
+over a fixed codomain. The composition transport rests on the concatenation
+isomorphism `⟦Γ++Δ⟧ ≅ ⟦Γ⟧ × ⟦Δ⟧` (split/join, inverse on both sides) and
+composes claims over concatenated contexts for a supplied composed case.
+Neither structure is an instance of an Echo law. Checked: the minimal
+transport `Beyond.composition-transport`, the minimal concatenation
+isomorphism `Beyond.split-singleton` / `join-singleton`, and the worked
+example `present-and-two` (`Beyond.composition-example`).
+
+== Test 3, run (in this repository): yields a law with no Epistemic counterpart
+
+The revision laws were checked against the pinned SoundWarrant interface
+(epistemic-types @ `dd948fbdddbdd06282cda8425e3e644e013c11ff`) in the same
+module. `SoundWarrant` is a static record: a warrant with a fixed
+`Evidence : Set` and a fixed `sound : Evidence → A`; its only transport is
+`sound-epi`. The revision transport needs retraction data (`first` /
+`later`), the thinning `retract-⊆ : Δ ⊆ Γ`, the split/join inverse laws
+for retracted evidence, dependent claims (`support ⊆ Γ`) and the revision
+record (`retract-then-extend`) — none of it present in SoundWarrant.
+Checked: the minimal transports `Beyond.retraction-case`,
+`Beyond.retraction-claim` and `Beyond.revision-transport`, with the worked
+examples `presence-survives` (`Beyond.retraction-example`) and
+`presence-after-revision` (`Beyond.revision-example`).
+
+Both tests 2–3 yield laws with no interface counterpart, and test 1
+passes against this repository's own record as well: the pre-registered
+rule decides *family*. See link:../PROOF-STATUS.adoc[PROOF-STATUS] for
+the full checked result and the precise missing-interface statements.
 
 == Decision rule (pre-registered)
 

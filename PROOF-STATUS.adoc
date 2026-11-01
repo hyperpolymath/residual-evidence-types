@@ -60,6 +60,27 @@ Agda 2.6.4.3 accepts every module with
 The modules use bundled builtins only. There are no postulates, unchecked
 termination overrides or holes in the accepted modules.
 
+=== Cubical compatibility (checked 2026-11-01)
+
+The same modules also type-check under `--cubical`:
+`--safe --cubical --no-libraries --ignore-interfaces --double-check` exits
+0 for the core (`All.agda`), both sibling comparisons, and the same nine
+expected rejections. The cubical run emits `-W[no]UnsupportedIndexedMatch`
+warnings for clauses whose computation relies on data-constructor
+injectivity (`suc`, `zero`, `_∷_`): 69 in the core, concentrated in the
+finite checker (`Finite/Soundness.agda` 33, `Finite/Int.agda` 27:
+`range-sound`, `any-false`, `<-complete`, `step-sound`, `noiseLoop-here`,
+`latents-covers`, `latentLoop-complete`, `from-covers`, `consIf-∈`,
+`∷-inj`, `∈-single`), plus `Examples/Presence.agda` 4
+(`two-not-at-most-one`, builtin `.extendedlambda0`), `Context.⊆-trans` 3
+and `Composition.pair-to-from` 2. EpistemicComparison adds the same four
+Presence warnings; EchoComparison's 20 warnings are all in the stdlib's
+`Relation/Nullary/Decidable.agda` (cubical transport computation, already
+recorded for the `--without-K` run). These definitions type-check but do
+not compute when applied to transports under cubical Agda. The
+composition and revision interface comparison in `Beyond.agda` is
+cubical-clean: no warnings.
+
 === First milestone: presence without identification
 
 |===
@@ -298,17 +319,125 @@ just check-echo /path/to/echo-types/proofs/agda /path/to/agda-stdlib/src
 
 The comparisons support treating this core as an ordinary evidence-refined
 fibre with a model-relative warrant interface. They do not establish a new
-primitive type or a distinct mathematical theory. The next research question
-is whether dependency-preserving composition and evidence revision add a
-useful interface beyond direct use of these foundations.
+primitive type or a distinct mathematical theory. Whether dependency-
+preserving composition and evidence revision add a useful interface beyond
+direct use of these foundations is checked separately below.
+
+=== Composition and revision transport beyond the interfaces
+
+Checked 2026-11-01 with Agda 2.6.4.3 under
+`--safe --without-K --no-libraries --ignore-interfaces --double-check` (the
+same compiler version the hosted receipt pins; locally the compiler is the
+bundled 2.6.4.3 distribution, not the CI container's Debian package).
+Question: do the
+composition transport (`Composition.agda`) and the revision transport
+(`Revision.agda`) extend beyond the `Echo.Echo` and `SoundWarrant`
+interfaces this repository compares against? Answer checked here: *yes,
+both extend beyond the interfaces*.
+
+The comparison is checked locally in
+link:src/ResidualEvidence/Beyond.agda[Beyond], which encodes the two
+pinned interfaces as ordinary types — `Echo.Echo` (echo-types @
+`9c4b72b52972c7e084c8f569635eb01caef64e7a`, `Echo f y = Σ A (λ x → f x ≡ y)`)
+and `SoundWarrant` (epistemic-types @
+`dd948fbdddbdd06282cda8425e3e644e013c11ff`, a `Warrant` with `Evidence : Set`
+plus `sound : Evidence → A`) — so it needs no cross-repository build
+dependency. The module first checks what the interfaces themselves
+transport, then the minimal composition and revision transports over the
+`Echo.Echo` fibre encoding.
+
+[cols="2,3",options="header"]
+|====
+|Checked result |Evidence
+|What Echo.Echo transports
+|`Beyond.echo-coarsen`: the fibre moves along coarsening (its `map-square`
+law, specialised to the diagonal). It moves candidates, not claims.
+|What SoundWarrant transports
+|`Beyond.sound-extract` (`sound-epi`): a token of the fixed evidence type
+extracts the claim. Nothing else.
+|The composition transport, minimal form
+|`Beyond.composition-transport`: claims under two evidence predicates E
+and F compose into a claim under their pointwise product E × F, for a
+composed case that is supplied explicitly (the singleton instance of
+`Composition.compose-claims`). It rests on the concatenation
+isomorphism `⟦[E]++[F]⟧ ≅ ⟦[E]⟧ × ⟦[F]⟧`
+(`Beyond.split-singleton` / `join-singleton`, inverse on both sides).
+|The revision transport, minimal form
+|`Beyond.retraction-case` (a case under E × F is a case under E, keeping
+world and observation), `Beyond.retraction-claim` (a claim under the kept
+evidence E transfers to the case under E × F) and
+`Beyond.revision-transport` (retract F, assume G; a claim resting on E
+transfers to the supplied revised case — the singleton instance of
+`Revision.survives-retraction` / `revise`).
+|Worked examples
+|`Beyond.composition-example` (`present-and-two`), `Beyond.retraction-example`
+(`presence-survives`), `Beyond.revision-example`
+(`presence-after-revision`).
+|====
+
+Precise missing-interface statements (why the transports extend beyond):
+
+* **Composition.** `Echo.Echo observe r` carries no evidence predicate, no
+  context of assumptions and no claims; its laws (`echo-intro`,
+  `map-over-id` / `-comp`, `map-square`, `Echo-comp-iso`, `cancel-iso`, the
+  pentagon iso) compose *functions* over a fixed codomain and accumulate
+  witness structure over an intermediate value. The composition transport
+  needs an evidence-context structure with concatenation and the isomorphism
+  `⟦Γ++Δ⟧ ≅ ⟦Γ⟧ × ⟦Δ⟧`, plus claims as functions over candidates — a law
+  with no counterpart among Echo's laws.
+* **Revision.** `SoundWarrant` is a static record: a warrant with a fixed
+  `Evidence : Set` and a fixed `sound : Evidence → A`. The revision transport
+  needs retraction data (`first` / `later`), the thinning
+  `retract-⊆ : Δ ⊆ Γ`, the split/join inverse laws for retracted evidence,
+  dependent claims (`support ⊆ Γ`) and the revision record
+  (`retract-then-extend`) — structure with no counterpart in SoundWarrant.
+
+Source: link:src/ResidualEvidence/Beyond.agda[Beyond].
+
+=== Dependence: assumption dependence is not a function of the candidate set
+
+DECISION-002 test 1, re-proved against this repository's own record in
+link:src/ResidualEvidence/Dependence.agda[Dependence] (Grade 3,
+Agda-only; the mirror ran it first — epistemic-types @ `5422cd5`,
+`Kripke/Dependence.agda` — and this module imports no mirror code).
+Two contexts with pointwise logically equivalent candidate sets differ in
+what a claim can be made to rest on. The witness pair: `Γ₁ = P ∷ []` and
+`Γ₂ = P ∷ P ∷ []` with `P u = ⊤`, `P v = ⊥`; `same-candidates` is the
+pointwise equivalence (the duplicated assumption appears twice in the Γ₂
+evidence); `properly-in-Γ₂` names the proper support `P ∷ []` with the
+thinning `drop (keep done)` and proves the claim under the support (at
+every candidate); `not-properly-in-Γ₁` shows no proper support exists —
+`keep done` is not proper at all, and the only proper thinning
+`drop done` leaves the empty context, where `P v = ⊥` refutes the claim
+at `v`. A box sees worlds; dependence sees assumptions — the structure
+the candidate set forgets. This is the justification-structure interface
+(the family half of DECISION-002), not a claim to a new primitive type
+theory: the machinery is an ordinary Σ-fibre, a list of assumptions and a
+thinning order.
+
+Checked 2026-11-01 under `--safe --without-K --no-libraries
+--ignore-interfaces --double-check` with the bundled Agda runtime (the
+`agda==2.6.4.3` wheel; the compiler binary reports `2.6.4.1-14f5317`),
+no axioms beyond the Agda builtins.
+
+[cols="2,3",options="header"]
+|===
+|Checked result |Evidence
+|Same candidates pointwise, different proper supports |`Dependence.same-candidates`, `Dependence.properly-in-Γ₂` (support `P ∷ []`, thinning `drop (keep done)`), `Dependence.not-properly-in-Γ₁`.
+|The two cases are consistent |`Dependence.c₁` (`u , refl , tt , tt`) and `Dependence.c₂` (`u , refl , tt , tt , tt`), both inhabited under their contexts.
+|===
+
+Source: link:src/ResidualEvidence/Dependence.agda[Dependence].
 
 == Remaining obligations
 
 * Causal models, source identification and confounding semantics.
 * Probability or uncertainty distributions; counts remain counts.
-* Whether composition and revision add a useful interface beyond direct use
-  of the Echo and Epistemic foundations; the comparisons above check the
-  first milestone only.
+* The composition and revision halves of the family-or-view question are
+  checked (see above): both extend beyond the interfaces; DECISION-002's
+  test 1 (dependence) now passes against this repository's own record as
+  well. All three family tests are checked; the family-or-view question is
+  decided *family*.
 
 The imported assessment and explorer remain unchanged. Their historical
 claims about the separate starter package are not verification receipts for

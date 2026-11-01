@@ -50,8 +50,10 @@ The second milestone added dependency-preserving composition, revision and
 retraction of evidence, and a certified checker that accounts for the
 explorer's signed domain, bounds, retained observation and inconsistent cases,
 with the in-range condition as an explicit premise. Candidate counts are not
-probabilities. The open question is whether composition and revision add an
-interface beyond direct use of the Echo and Epistemic foundations.
+probabilities. The question whether composition and revision add an interface
+beyond direct use of the Echo and Epistemic foundations is checked
+(2026-11-01): both extend beyond the interfaces; see
+link:../PROOF-STATUS.adoc[PROOF-STATUS].
 
 == Ownership and shared meanings
 
