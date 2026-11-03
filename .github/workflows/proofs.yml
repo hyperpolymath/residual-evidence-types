@@ -38,18 +38,12 @@ jobs:
       - name: Install authenticated Debian toolchain packages
         run: |
           apt-get update
-          apt-get install --no-install-recommends -y ca-certificates git curl unzip python3 agda-bin=2.6.4.3-1+b2
+          apt-get install --no-install-recommends -y ca-certificates git curl unzip agda-bin=2.6.4.3-1+b2
       - uses: actions/checkout@v6.0.3
         with:
           persist-credentials: false
       - name: Verify the checked Agda version
         run: test "$(agda --version)" = 'Agda version 2.6.4.3'
-      - name: Evaluate K9 proof configuration and check repository agreement
-        run: bash scripts/check-contract.sh
-      - name: Core proofs and expected rejections
-        run: bash scripts/check.sh
-      - name: Pinned sibling comparisons and expected rejections
-        run: bash scripts/check-siblings.sh
       # bun is installed from a pinned upstream release and verified against two
       # digests before it is run: the SHA-256 published in the release's
       # SHASUMS256.txt, and a SHA-512 recorded here when the pin was taken.
@@ -68,5 +62,11 @@ jobs:
           unzip -q "$zip" -d "$RUNNER_TEMP/bun"
           install -m 0755 "$RUNNER_TEMP/bun/bun-linux-x64/bun" /usr/local/bin/bun
           test "$(bun --version)" = "${BUN_VERSION}"
+      - name: Evaluate K9 proof configuration and check repository agreement
+        run: bash scripts/check-contract.sh
+      - name: Core proofs and expected rejections
+        run: bash scripts/check.sh
+      - name: Pinned sibling comparisons and expected rejections
+        run: bash scripts/check-siblings.sh
       - name: Explorer correspondence (harness, table drift, refl)
         run: bash scripts/correspondence.sh

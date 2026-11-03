@@ -43,8 +43,10 @@ bash scripts/check-contract.sh
 bash scripts/check-contract.sh --offline
 ----
 
-The gate uses Bash, Python 3's standard library and standard Linux command-line
-tools, including GNU coreutils, grep, sed and awk, on Linux x86_64. It downloads
+The gate uses Bash, the repository's pinned Bun 1.3.14 scripting runtime and
+standard Linux command-line tools, including GNU coreutils, grep, sed and awk,
+on Linux x86_64. Set `BUN` to the Bun executable when it is not on `PATH`.
+The gate downloads
 the official Nickel 1.18.0 binary and exactly two
 files from the pinned standards commit into ignored `_build/k9-tools/`:
 the canonical validator and its normative component contract. Downloads and
@@ -54,7 +56,7 @@ the full standards checkout. Missing tools, checksum mismatches, timeouts or
 skipped semantic checks fail the gate.
 
 The gate applies the canonical contract at strict L2 and exports the evaluated
-data. `scripts/check-contract.py` then compares that data with the actual
+data. `scripts/check-contract.js` then compares that data with the actual
 Just targets, workflow version pins and script invocations, Agda option arrays,
 dependency fetch pins, rejection-control inventories and correspondence
 stages and table size. Configured command strings are never executed. These

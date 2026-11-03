@@ -13,7 +13,13 @@ if (( $# != 0 )); then
   exit 2
 fi
 
-for tool in python3 sha256sum awk sed grep head tail cmp tr basename dirname mktemp timeout uname; do
+bun="${BUN:-bun}"
+command -v "$bun" >/dev/null || { echo "ERROR: required Bun runtime is missing: $bun" >&2; exit 1; }
+if [[ "$("$bun" --version)" != 1.3.14 ]]; then
+  echo 'ERROR: proof configuration checks require the pinned Bun 1.3.14 runtime.' >&2
+  exit 1
+fi
+for tool in sha256sum awk sed grep head tail cmp tr basename dirname mktemp timeout uname; do
   command -v "$tool" >/dev/null || { echo "ERROR: required tool is missing: $tool" >&2; exit 1; }
 done
 if [[ "$(uname -s)" != Linux || "$(uname -m)" != x86_64 ]]; then
@@ -107,16 +113,8 @@ fi
 # canonical validator has already checked the magic, pedigree and predicates;
 # repeat its contract application while exporting the exact data we consume.
 sed '1s/^K9!$/# K9! envelope removed for Nickel/' "$component" > "$tempdir/body.ncl"
-python3 - "$standards/$contract_rel" "$tempdir/body.ncl" "$tempdir/driver.ncl" <<'PY'
-import json
-import pathlib
-import sys
-contract, body, destination = sys.argv[1:]
-pathlib.Path(destination).write_text(
-    f'let K9 = import {json.dumps(contract)} in\n'
-    f'let k9_doc = import {json.dumps(body)} in\n'
-    'k9_doc | K9.Component\n', encoding='utf-8')
-PY
+"$bun" scripts/check-contract.js write-driver \
+  "$standards/$contract_rel" "$tempdir/body.ncl" "$tempdir/driver.ncl"
 if ! timeout 60s "$nickel" export --format json "$tempdir/driver.ncl" \
      > "$logs/evaluated.json" 2> "$logs/export.log"; then
   cat "$logs/export.log" >&2
@@ -124,7 +122,7 @@ if ! timeout 60s "$nickel" export --format json "$tempdir/driver.ncl" \
   exit 1
 fi
 
-python3 scripts/check-contract.py \
+"$bun" scripts/check-contract.js check \
   --root "$PWD" --document "$logs/evaluated.json" --verdict "$logs/canonical.json" \
   --standards-revision "$standards_rev" --nickel-version "$nickel_version" \
   --nickel-sha256 "$nickel_sha256" --regression
@@ -132,34 +130,11 @@ python3 scripts/check-contract.py \
 # Negative semantic fixture: remove --safe from the configured value while
 # retaining the predicate that requires it. Require the canonical Nickel
 # contract error, not a parse error, missing tool, earlier layer or timeout.
-python3 - "$component" "$tempdir/without-safe.k9.ncl" <<'PY'
-import pathlib
-import sys
-source, destination = map(pathlib.Path, sys.argv[1:])
-text = source.read_text(encoding='utf-8')
-before = '        = ["--safe", "--without-K", "--no-libraries", "--ignore-interfaces", "--double-check"],'
-after = before.replace('"--safe", ', '', 1)
-if text.count(before) != 1:
-    raise SystemExit('ERROR: could not construct the missing-safety-flag fixture unambiguously')
-destination.write_text(text.replace(before, after, 1), encoding='utf-8')
-PY
+"$bun" scripts/check-contract.js make-negative "$component" "$tempdir/without-safe.k9.ncl"
 status=0
 timeout 60s bash "$standards/$validator_rel" \
   --nickel "$nickel" --strict --layer L2 --json -- "$tempdir/without-safe.k9.ncl" \
   > "$logs/without-safe.json" 2> "$logs/without-safe.log" || status=$?
-python3 - "$status" "$logs/without-safe.json" <<'PY'
-import json
-import pathlib
-import sys
-status = int(sys.argv[1])
-result = json.loads(pathlib.Path(sys.argv[2]).read_text(encoding='utf-8'))
-errors = [finding for finding in result['findings'] if finding['severity'] == 'error']
-if (status != 1 or result['verdict'] != 'fail' or result['skipped'] != 0
-        or len(errors) != 1 or errors[0]['rule'] != 'K9-N001'
-        or errors[0]['layer'] != 'L2'
-        or 'violates the K9.Component contract' not in errors[0]['message']):
-    raise SystemExit('ERROR: the missing-safety-flag fixture did not fail at the intended Nickel contract')
-print('PASS: Nickel rejects a configured safety-flag omission at K9-N001 / L2')
-PY
+"$bun" scripts/check-contract.js assert-negative "$status" "$logs/without-safe.json"
 
 echo 'PASS: proof configuration, checkout consistency and targeted rejection controls (proof execution is separate)'
