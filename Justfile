@@ -18,10 +18,13 @@ check-echo echo_src stdlib_src:
 fetch-siblings:
     bash scripts/fetch-siblings.sh
 
-# The full hosted set, locally: core, rejections and both sibling comparisons.
-check-all: check fetch-siblings
-    just check-epistemic _build/dependencies/epistemic-types/src
-    just check-echo _build/dependencies/echo-types/proofs/agda _build/dependencies/standard-library/src
+# Check both pinned sibling comparisons and their semantic rejection controls.
+check-siblings:
+    bash scripts/check-siblings.sh
+
+# Core and sibling proofs, including both sets of expected-rejection controls.
+# Explorer correspondence remains the separate `correspondence` target below.
+check-all: check check-siblings
 
 # Explorer correspondence: bun harness, table drift diff, and the refl proof
 # that the certified checker agrees with the explorer on all 546 configurations.

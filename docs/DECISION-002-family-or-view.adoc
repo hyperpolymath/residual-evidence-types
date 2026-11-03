@@ -1,5 +1,7 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
 = DECISION-002 — Is residual-evidence a family or a view on Echo + Epistemic?
-:revdate: 2026-10-12
+:revdate: 2026-11-03
 
 PROOF-STATUS asks whether composition and revision add an interface beyond
 Echo + Epistemic. This record makes the question decidable and runs the
@@ -39,6 +41,21 @@ box sees worlds; dependence sees assumptions. Expected outcome: *family* —
 the interface residual-evidence adds is justification structure. To be
 re-proved against this repo's own record (the mirror is the same shape;
 `drop (keep done)` is the support). Tests 2–3 remain as recorded.
+
+== Sibling transport implementation (2026-11-03)
+
+`EchoComparison` now transports residual context composition and observation
+coarsening through `Echo.Echo`. `EpistemicComparison` transports retained
+claims through retraction and revision into `SoundWarrant`, and measures
+non-vacuity for its residual evidence type. These extensions await their
+own hosted receipt in link:../PROOF-STATUS.adoc[PROOF-STATUS].
+
+This is progress on the connection obligations in
+https://github.com/hyperpolymath/nextgen-typing/issues/115[nextgen-typing#115].
+It does not identify evidence-context composition with Echo's
+function-composition isomorphism, prove that every residual law has a sibling
+counterpart, or re-prove the dependence result against the local record.
+The decision rule below therefore remains open.
 
 == Decision rule (pre-registered)
 

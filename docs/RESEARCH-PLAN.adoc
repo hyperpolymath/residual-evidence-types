@@ -3,7 +3,7 @@
 = Residual Evidence Types: first research milestone
 :icons: font
 
-*Status: work in progress, 2026-09-30.* The imported assessment and explorer
+*Status: work in progress, 2026-11-03.* The imported assessment and explorer
 are the starting material. The separate Agda starter archive mentioned in
 the assessment is not included; its reported proofs have not been reproduced here.
 
@@ -15,6 +15,14 @@ Epistemic interfaces.
 dependency-preserving composition, evidence revision and retraction, and a
 certified finite checker proved to agree with the explorer on all 546
 configurations. See link:../PROOF-STATUS.adoc[the verification record].
+
+*Sibling extensions implemented, hosted verification pending (2026-11-03):*
+composition and coarsening over the actual Echo fibre, and non-vacuity,
+constructive retraction and revision through the actual Epistemic warrant
+interface. The corresponding rejection controls run through
+`just check-siblings`. These target
+https://github.com/hyperpolymath/nextgen-typing/issues/115[nextgen-typing#115,
+AC2 and AC3]; their own hosted receipt must establish acceptance.
 
 == Start with presence without identification
 
@@ -52,6 +60,16 @@ explorer's signed domain, bounds, retained observation and inconsistent cases,
 with the in-range condition as an explicit premise. Candidate counts are not
 probabilities. The open question is whether composition and revision add an
 interface beyond direct use of the Echo and Epistemic foundations.
+
+The extended comparisons preserve the relevant obligations: composition
+needs an inhabited joint case; coarse claims transfer to fine observations;
+retraction and revision retain the claim's support; and actual-world
+conclusions require observation equality and evidence for that world.
+Non-vacuity concerns the residual claim type carried by a particular sound
+warrant. The sibling's arbitrary `Epi` tokens remain deliberately non-factive.
+These transports alone do not resolve the family-or-view tests in
+link:DECISION-002-family-or-view.adoc[DECISION-002], including the outstanding
+dependence theorem against this repository's own record.
 
 == Ownership and shared meanings
 
