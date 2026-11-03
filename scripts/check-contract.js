@@ -294,7 +294,7 @@ function temporaryCheckout(identifier) {
 function main(mode, args) {
   const repository = new Checkout();
   if (mode === 'prepare') {
-    requireThat(args.length === 2 && /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/.test(args[1]),
+    requireThat(args.length === 2 && /^\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(args[1]),
       'prepare requires standards revision and Nickel version');
     const standards = standardsDirectory(args[0]);
     for (const name of [cacheDirectory, logDirectory, `${standards}/${dirname(contractPath)}`, `${standards}/${dirname(validatorPath)}`]) {
