@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MPL-2.0
 # SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
 set -euo pipefail
-cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
+cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
 prover="${AGDA:-agda}"
 "$prover" --version
 flags=(--safe --without-K --no-libraries --ignore-interfaces --double-check -i src -i tests/integration)
