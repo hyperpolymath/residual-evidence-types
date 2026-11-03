@@ -13,6 +13,37 @@ the explorer. The project remains work in progress.
 
 == Hosted verification receipt
 
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41671834379[GitHub Actions run 41671834379]
+completed successfully on 2026-11-03 at 16:15:51 UTC for
+https://github.com/hyperpolymath/residual-evidence-types/pull/23[PR #23],
+head `05a92c25df1b6617a264ce1040fca39de71b51c6`.
+The checkout log records synthetic merge commit
+`44647305bb4b993f0bce691789b954b5fa823615`, whose parents are baseline
+`97244f5cb63bd6697caff261b187b62e9788b692` and that PR head. The merge and
+head have the same tree, `6ad018674c87711ab901d536d6197139c528ace6`.
+
+The proof job used Agda 2.6.4.3 with `--safe --without-K --no-libraries
+--ignore-interfaces --double-check` in the digest-pinned Debian container.
+It accepted the core and both expanded sibling comparisons, rejected all
+nine core controls and all six sibling controls, and positively checked
+each sibling control's prefix before requiring failure at `invalid`.
+The explorer stage passed all 11 harness tests, matched all 546 generated
+rows byte for byte and accepted the correspondence theorem by `refl`.
+The sibling pins listed below were unchanged.
+
+This receipt covers that exact code tree and the proof workflow. Later code
+changes need their own successful run; other CI integrations have separate
+results.
+
+=== Earlier baseline receipt
+
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/38303561291[GitHub Actions run 38303561291]
+checked commit `97244f5cb63bd6697caff261b187b62e9788b692`. It covers the core,
+nine core rejections, the original sibling comparisons and the explorer
+correspondence. It predates the expanded sibling comparisons below.
+
+=== Earlier milestone receipt
+
 https://github.com/hyperpolymath/residual-evidence-types/actions/runs/36740394802[GitHub Actions run 36740394802]
 completed successfully on 2026-09-30 for commit `befdf9641c1bc6ecf58946e5ccbd0c630f4fc4c3`.
 Inside a digest-pinned Debian 13 container with Agda 2.6.4.3 from the
@@ -55,10 +86,30 @@ action beyond `actions/checkout`.
 
 == Local verification
 
-Agda 2.6.4.3 accepts every module with
-`--safe --without-K --no-libraries --ignore-interfaces`.
-The modules use bundled builtins only. There are no postulates, unchecked
+Local checks on 2026-11-03 used Agda 2.6.4.3 with
+`--safe --without-K --no-libraries --ignore-interfaces --double-check`.
+The core gate rejected all nine controls; the sibling gate accepted both
+positive comparisons and rejected all six controls after checking their
+prefixes. The explorer gate passed 11 tests, reproduced the 546-row table
+and accepted its correspondence by `refl`.
+The core modules use bundled builtins only. There are no postulates, unchecked
 termination overrides or holes in the accepted modules.
+
+Two additional *local* fault injections tested the sibling gate itself:
+
+[cols="2,3",options="header"]
+|===
+|Injected fault |Observed gate response
+|Replace a deliberately invalid declaration with a valid one
+|Failed because the expected-rejection module was accepted.
+|Introduce a type error in a helper before `invalid`
+|Failed while checking the supposedly valid prefix; the helper error did
+not count as rejection of `invalid`.
+|===
+
+Both mutations were restored, and the unchanged sibling gate passed again.
+These fault injections are local evidence; the hosted receipt above covers
+the restored source and its ordinary checks, not the mutation runs.
 
 === First milestone: presence without identification
 
@@ -261,20 +312,21 @@ successful expected rejection. Diagnostic logs go to ignored `_build/check-logs/
 == Actual interface comparisons
 
 These modules import the actual sibling sources, not local copies of their
-interfaces. The checked Epistemic file is unchanged at the listed commit.
-The local Echo checkout has unpublished commits, so it is not used as a CI
-pin: the checked `Echo.agda` has Git blob `86745cd6d6fd683bb11360f43b0b37da32033c6e`,
-identical to the file at the published Echo revision below. Both published
-revisions are pinned in the CI workflow.
+interfaces. The source revisions below are pinned in
+`scripts/fetch-siblings.sh` and are unchanged by the extended comparisons.
+The original Echo receipt recorded `Echo.agda` with Git blob
+`86745cd6d6fd683bb11360f43b0b37da32033c6e` at the published revision below.
+The following table records the earlier hosted scope; the new statements
+are inventoried separately afterwards.
 
 [cols="1,2,3",options="header"]
 |===
-|Interface |Pinned source |Checked scope
+|Interface |Pinned source |Earlier hosted scope
 |Echo
 |`echo-types` commit `9c4b72b52972c7e084c8f569635eb01caef64e7a`
 |link:tests/integration/EchoComparison.agda[EchoComparison]: candidate worlds
 round-trip through evidence over `Echo.Echo`. This checks the fibre packaging,
-not general composition, revision or an executable checker.
+before the composition and coarsening extensions.
 |Epistemic
 |`epistemic-types` commit `dd948fbdddbdd06282cda8425e3e644e013c11ff`
 |link:tests/integration/EpistemicComparison.agda[EpistemicComparison]: a
@@ -287,11 +339,97 @@ warnings in the library's `Relation.Nullary.Decidable` concerning cubical
 transport computation. The check succeeds; no cubical-computation claim is made.
 |===
 
-Run the integrations with explicit source directories:
+=== Expanded comparisons
+
+The implementation targets
+https://github.com/hyperpolymath/nextgen-typing/issues/115[nextgen-typing#115,
+AC2 and AC3]. Each operation uses the actual pinned interface above and is
+covered by hosted run `41671834379` for the code tree recorded in the receipt.
+
+[cols="2,3",options="header"]
+|===
+|Checked statement |Scope and retained premises
+|`EchoComparison.compose-echo-claims`
+|Transports `ResidualEvidence.Composition.compose-claims` to evidence over
+`Echo.Echo`. The concatenated context needs its own inhabited `EchoCase`;
+two separately inhabited component cases do not supply joint consistency.
+`echo-present-and-two` gives the concrete presence/value example.
+|`EchoComparison.coarsen-echo-case` and `coarsen-echo-claim`
+|A claim over the coarse observation transfers to the fine observation.
+`echo-fine-positive` instantiates the direction;
+`echo-coarsening-forgets-presence` supplies a silent counter-world to its
+converse.
+|`EpistemicComparison.holds-non-vacuous` and `warrant-non-vacuous`
+|An inhabited residual case cannot support a candidate-wide proof of
+falsehood. The second statement applies this to the evidence projection of
+the actual transported `SoundWarrant`.
+|`EpistemicComparison.unsound-bottom-token`
+|A positive control preserves the sibling's intended non-factivity:
+arbitrary `Epi` tokens can purport to support falsehood. Such a token does
+not supply a proof of falsehood or a token of the residual sound warrant.
+|`EpistemicComparison.conflict-admits-no-case-and-token`
+|An inconsistent residual case cannot be paired with an epistemic token,
+because the case component is impossible. This does not forbid arbitrary
+tokens independently of a case.
+|`EpistemicComparison.retracted-warrant` and `retract-warrant-sound`
+|Retraction is constructive through the core's thinning. A retained claim
+requires its support in the remaining context, together with observation
+equality and the remaining evidence for the actual world.
+|`EpistemicComparison.revise-warrant-sound`
+|Revision requires support in the intermediate context, an explicitly
+inhabited revised case, and observation/evidence premises for the actual
+world. `retracted-example` and `revised-example` establish presence at
+`(1,1)` using the retained noise bound; `two-before-retraction` provides a
+positive control for the claim that depends on `NoNoise`.
+|===
+
+Non-vacuity here concerns the evidence type of the residual sound warrant.
+The warrant object can exist without a token; arbitrary sibling warrants
+remain non-factive. These statements do not establish factivity of every
+`Epi` value.
+
+=== Sibling rejection controls
+
+`scripts/check-siblings.sh` discovers the Echo and Epistemic controls under
+`tests/integration/reject/` and requires both families to be present:
+
+* `FalseEchoComposition`: supplying only the left case where composition
+  requires an inhabited joint case.
+* `FalseEchoCoarsening`: using a fine-observation proof on a newly admitted
+  coarse candidate.
+* `FalseEpistemicRetraction`: reusing the old support thinning after
+  `NoNoise` has been removed.
+* `FalseEpistemicRevision`: reusing that support through a revision whose
+  intermediate context no longer contains `NoNoise`.
+* `FalseEpistemicNonVacuity`: extracting falsehood with `sound-epi` from an
+  arbitrary `Warrant`, which lacks the required soundness proof.
+* `FalseEpistemicActualWorld`: obtaining an actual-world conclusion without
+  the actual world's required evidence.
+
+The runner first checks both positive comparisons. For every control it
+also checks the valid prefix before the final `invalid` declaration, then
+requires a type-error diagnostic inside that declaration. A helper failure,
+missing import, parse error, unresolved hole or prover crash is a gate
+failure. Logs go to ignored `_build/check-logs/`. All six controls and their
+valid prefixes passed these checks in hosted run `41671834379`.
+
+=== Reproducing the comparisons
+
+Run the core and pinned sibling gates:
 
 [source,bash]
 ----
 just check
+just check-siblings
+# Equivalent combined core and sibling entry point:
+just check-all
+----
+
+`just correspondence` remains a separate explorer gate. For an individual
+positive comparison against explicitly supplied source directories:
+
+[source,bash]
+----
 just check-epistemic /path/to/epistemic-types/src
 just check-echo /path/to/echo-types/proofs/agda /path/to/agda-stdlib/src
 ----
@@ -300,15 +438,19 @@ The comparisons support treating this core as an ordinary evidence-refined
 fibre with a model-relative warrant interface. They do not establish a new
 primitive type or a distinct mathematical theory. The next research question
 is whether dependency-preserving composition and evidence revision add a
-useful interface beyond direct use of these foundations.
+useful interface beyond direct use of these foundations. In particular,
+transporting residual operations across the interfaces does not prove that
+all their laws are instances of sibling laws; evidence-context composition
+is not identified here with Echo's function-composition isomorphism.
 
 == Remaining obligations
 
 * Causal models, source identification and confounding semantics.
 * Probability or uncertainty distributions; counts remain counts.
 * Whether composition and revision add a useful interface beyond direct use
-  of the Echo and Epistemic foundations; the comparisons above check the
-  first milestone only.
+  of the Echo and Epistemic foundations. The expanded comparisons address
+  specific transport and non-vacuity obligations, while the family-or-view
+  decision and the dependence theorem against the local record remain open.
 
 The imported assessment and explorer remain unchanged. Their historical
 claims about the separate starter package are not verification receipts for

@@ -13,9 +13,10 @@ types, the deliberately invalid modules that its gate must reject, narrow
 comparisons against two sibling Agda developments, and the research material
 (an assessment and a finite JavaScript explorer) that the proofs are being
 built to certify. The core proof gate, `scripts/check.sh`, checks the positive
-proofs and expected rejections inside a digest-pinned container in CI. After
-fetching the sibling revisions, CI separately runs `EpistemicComparison.agda`
-and `EchoComparison.agda`.
+proofs and expected rejections inside a digest-pinned container in CI.
+`scripts/check-siblings.sh` fetches the pinned sibling revisions, runs
+`EpistemicComparison.agda` and `EchoComparison.agda`, and checks their
+deliberately invalid companion modules.
 
 == Directory structure
 
@@ -30,7 +31,8 @@ and `EchoComparison.agda`.
 │   └── All.agda                     #   imports every positive module
 ├── tests/reject/                    # one module per expected rejection
 ├── tests/integration/               # comparisons with echo-types and epistemic-types
-├── scripts/                         # check.sh (the gate), fetch-siblings.sh
+│   └── reject/                      # sibling controls, final declaration named invalid
+├── scripts/                         # core, sibling and correspondence gates; dependency fetch
 ├── docs/                            # research plan and governance documents
 ├── .github/workflows/               # proofs.yml, main-estate-audit.yml, actions.lock
 ├── .github/actions/                 # composite checks used by the estate audit
@@ -39,7 +41,7 @@ and `EchoComparison.agda`.
 ├── residual-evidence-explorer.html  # the finite explorer, kept as imported
 ├── residual-evidence-assessment.md  # the imported assessment
 ├── residual-evidence-types.agda-lib # library file: include src, --safe --without-K
-├── Justfile                         # check, check-echo, check-epistemic, fetch-siblings
+├── Justfile                         # check, check-siblings, check-all, correspondence
 ├── PROOF-STATUS.adoc                # what is proved, with hosted-run receipts
 └── README.adoc
 ----
@@ -55,23 +57,32 @@ module that is merely missing an import or has a parse error does not count
 as a rejection. The script prints one `PASS` line per rejection and a final
 line naming the number of rejections it expected.
 
+The sibling gate uses the same Agda flags. It accepts both positive
+comparison modules first, then checks each rejection module's imports and
+helpers in a temporary copy that omits its final `invalid` declaration.
+Only then does it require the complete module to fail with a type error
+located inside that declaration. A missing dependency, invalid helper,
+unresolved hole, parse error or prover crash cannot count as a successful
+rejection. Both the Echo and Epistemic control families must be present.
+Diagnostic logs are kept under ignored `_build/check-logs/`.
+
 == Continuous integration
 
 `.github/workflows/proofs.yml` runs the gate in a digest-pinned
 `debian:13-slim` container and installs `agda-bin` from the distribution
 package rather than through a third-party action, so the workflow does not
 depend on the repository's action allow-list. The sibling comparisons check
-out `echo-types` and `epistemic-types` at revisions pinned by full SHA in the
-workflow; a pin is moved in its own commit with its own successful run, and
-the run is cited in `PROOF-STATUS.adoc`.
+out `echo-types` and `epistemic-types` at revisions pinned by full SHA in
+`scripts/fetch-siblings.sh`; a pin is moved in its own commit with its own
+successful run, and the run is cited in `PROOF-STATUS.adoc`.
 
 `.github/workflows/main-estate-audit.yml` calls the estate-wide audit, which
 runs the composite checks under `.github/actions/`.
 
 == Dependencies
 
-* `echo-types` and `epistemic-types`, pinned by SHA in `proofs.yml`; only the
-  integration modules import them.
+* `echo-types` and `epistemic-types`, pinned by SHA in
+  `scripts/fetch-siblings.sh`; only the integration modules import them.
 * `agda-stdlib` 2.1 for the echo comparison; the core imports only
   `Agda.Builtin` modules.
 
