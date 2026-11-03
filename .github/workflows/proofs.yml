@@ -38,12 +38,14 @@ jobs:
       - name: Install authenticated Debian toolchain packages
         run: |
           apt-get update
-          apt-get install --no-install-recommends -y ca-certificates git curl unzip agda-bin=2.6.4.3-1+b2
+          apt-get install --no-install-recommends -y ca-certificates git curl unzip python3 agda-bin=2.6.4.3-1+b2
       - uses: actions/checkout@v6.0.3
         with:
           persist-credentials: false
       - name: Verify the checked Agda version
         run: test "$(agda --version)" = 'Agda version 2.6.4.3'
+      - name: Evaluate K9 proof configuration and check repository agreement
+        run: bash scripts/check-contract.sh
       - name: Core proofs and expected rejections
         run: bash scripts/check.sh
       - name: Pinned sibling comparisons and expected rejections

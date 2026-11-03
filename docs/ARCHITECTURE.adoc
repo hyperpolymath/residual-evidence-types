@@ -30,6 +30,7 @@ deliberately invalid companion modules.
 │   ├── Examples/Presence.agda       #   presence without identification
 │   └── All.agda                     #   imports every positive module
 ├── tests/reject/                    # one module per expected rejection
+├── tests/DASHBOARD.adoc             # proof/test categories, receipts, benchmark status
 ├── tests/integration/               # comparisons with echo-types and epistemic-types
 │   └── reject/                      # sibling controls, final declaration named invalid
 ├── scripts/                         # core, sibling and correspondence gates; dependency fetch
@@ -39,7 +40,7 @@ deliberately invalid companion modules.
 ├── .github/rulesets/                # ruleset documents (applied separately)
 ├── .machine_readable/               # machine-readable project descriptors
 ├── residual-evidence-explorer.html  # the finite explorer, kept as imported
-├── residual-evidence-assessment.md  # the imported assessment
+├── residual-evidence-assessment.adoc # imported assessment; content preserved in AsciiDoc
 ├── residual-evidence-types.agda-lib # library file: include src, --safe --without-K
 ├── Justfile                         # check, check-siblings, check-all, correspondence
 ├── PROOF-STATUS.adoc                # what is proved, with hosted-run receipts

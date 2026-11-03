@@ -1,0 +1,98 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+= Proof validation configuration
+
+`proof-validation.k9.ncl` is a K9 SVC component at the `Yard` leash level.
+Its Nickel predicates constrain the existing proof targets, required Agda
+options, toolchain versions, sibling pins, rejection-control inventories and
+explorer correspondence stages. Removing `--safe` from its configured value,
+changing a constrained pinned value or deleting an entry from a configured
+control inventory causes contract evaluation to fail.
+
+The component is pure configuration. It contains no recipes or imports,
+requests no capabilities and grants no network, filesystem-write or subprocess
+access. Its script names are data for a separately authorised host to compare
+with the checkout. Evaluating the component does not run those scripts and
+does not establish that an Agda proof passes.
+
+== Authoritative sources
+
+The component follows the K9 Component Contract Specification 1.0.0 in
+`metadatastician/standards` at
+`d3e4b485a2af90c92a8e18af0888cd19cb132cd9`:
+
+* https://github.com/metadatastician/standards/blob/d3e4b485a2af90c92a8e18af0888cd19cb132cd9/1-formats/k9/spec/K9-CONTRACT-SPEC.adoc[Normative specification].
+* https://github.com/metadatastician/standards/blob/d3e4b485a2af90c92a8e18af0888cd19cb132cd9/1-formats/k9/spec/contract/k9_contract.ncl[Machine-readable component contract].
+* https://github.com/metadatastician/standards/blob/d3e4b485a2af90c92a8e18af0888cd19cb132cd9/1-formats/k9/tools/k9-validate.sh[Canonical validator].
+
+`hyperpolymath/k9-ecosystem` is the implementation and coordination hub;
+the standards repository owns the normative component contract. The
+seven-section repository pedigree and the YAML-bodied K9 coordination dialect
+are different contracts and do not govern this component.
+
+== Validation and proof evidence
+
+Run the consumer gate from the repository root:
+
+[source,bash]
+----
+just check-contract
+# Equivalent, without Just:
+bash scripts/check-contract.sh
+# Once the pinned tools are cached, refuse any download:
+bash scripts/check-contract.sh --offline
+----
+
+The gate uses Bash, Python 3's standard library and standard Linux command-line
+tools, including GNU coreutils, grep, sed and awk, on Linux x86_64. It downloads
+the official Nickel 1.18.0 binary and exactly two
+files from the pinned standards commit into ignored `_build/k9-tools/`:
+the canonical validator and its normative component contract. Downloads and
+every cache reuse are checked against fixed SHA-256 values before execution.
+There is no global installation, remote installer execution or dependency on
+the full standards checkout. Missing tools, checksum mismatches, timeouts or
+skipped semantic checks fail the gate.
+
+The gate applies the canonical contract at strict L2 and exports the evaluated
+data. `scripts/check-contract.py` then compares that data with the actual
+Just targets, workflow version pins and script invocations, Agda option arrays,
+dependency fetch pins, rejection-control inventories and correspondence
+stages and table size. Configured command strings are never executed. These
+are bounded source-shape checks; they do not establish that the proof scripts
+have executed or that their proofs pass.
+
+Three isolated negative controls run with the gate: Nickel must reject a
+configured safety-flag omission at `K9-N001` / L2; the checkout comparison must
+reject a removed core safety flag; and it must reject a missing core rejection
+control. Each negative control must fail for its intended reason. The
+repository's own files are not changed by these controls. Logs and the
+evaluated configuration are written under `_build/check-logs/contract/`.
+
+To invoke the canonical validator directly with an existing toolchain:
+
+[source,bash]
+----
+bash /path/to/standards/1-formats/k9/tools/k9-validate.sh \
+  --strict --layer L2 --json -- contractiles/k9/proof-validation.k9.ncl
+----
+
+The validator handles the `K9!` envelope before invoking Nickel. Passing the
+whole component directly to `nickel typecheck` is incorrect because the magic
+line is not Nickel syntax. Typechecking alone also does not evaluate predicate
+contracts; the canonical L2 check both typechecks and exports the value.
+
+Without Nickel, `--layer L1` provides only an envelope and structural screen.
+A skipped L2 check is not a successful semantic validation. The unsigned Yard
+component does not claim a verified signature or authority to execute code.
+
+The evaluated configuration must be checked against the actual repository
+targets. The existing proof scripts then establish their respective results:
+`scripts/check.sh`, `scripts/check-siblings.sh` and
+`scripts/correspondence.sh`. Verification claims belong in
+link:../../PROOF-STATUS.adoc[the proof record], with the hosted run and exact
+checked commit required by link:../../docs/GOVERNANCE.adoc[governance].
+
+When a toolchain pin, target or control inventory changes, update this
+configuration deliberately and run both the configuration check and the
+affected proof checks. The configuration stores expectations rather than a
+stale copy of a successful proof receipt.

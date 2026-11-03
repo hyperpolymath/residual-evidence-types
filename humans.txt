@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: CC-BY-SA-4.0
+# SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+
+/* TEAM */
+Maintainer: Jonathan D.A. Jewell
+Role: Lead Maintainer
+Contact: https://github.com/hyperpolymath
+Maintainer roster: https://github.com/hyperpolymath/residual-evidence-types/blob/main/docs/MAINTAINERS.adoc
+
+/* PROJECT */
+Name: Residual Evidence Types
+Repository: https://github.com/hyperpolymath/residual-evidence-types
+Scope: Evidence-refined observation fibres, inhabited cases and model-relative claims.
+Proof language: Agda
+Explorer: HTML and JavaScript
+Verification tools: Agda, Bash, Bun and Just
+Code licence: MPL-2.0
+Documentation licence: CC-BY-SA-4.0
+Licence authority: Per-file SPDX identifiers; see README.adoc and LICENSES/.
+
+/* ATTRIBUTION */
+Authority: The repository's maintainer roster and version history.
+Identity assurance: Repository attribution; no independent identity proof is asserted here.
