@@ -13,16 +13,34 @@ the explorer. The project remains work in progress.
 
 == Hosted verification receipt
 
-The latest baseline receipt is
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41671834379[GitHub Actions run 41671834379]
+completed successfully on 2026-11-03 at 16:15:51 UTC for
+https://github.com/hyperpolymath/residual-evidence-types/pull/23[PR #23],
+head `05a92c25df1b6617a264ce1040fca39de71b51c6`.
+The checkout log records synthetic merge commit
+`44647305bb4b993f0bce691789b954b5fa823615`, whose parents are baseline
+`97244f5cb63bd6697caff261b187b62e9788b692` and that PR head. The merge and
+head have the same tree, `6ad018674c87711ab901d536d6197139c528ace6`.
+
+The proof job used Agda 2.6.4.3 with `--safe --without-K --no-libraries
+--ignore-interfaces --double-check` in the digest-pinned Debian container.
+It accepted the core and both expanded sibling comparisons, rejected all
+nine core controls and all six sibling controls, and positively checked
+each sibling control's prefix before requiring failure at `invalid`.
+The explorer stage passed all 11 harness tests, matched all 546 generated
+rows byte for byte and accepted the correspondence theorem by `refl`.
+The sibling pins listed below were unchanged.
+
+This receipt covers that exact code tree and the proof workflow. Later code
+changes need their own successful run; other CI integrations have separate
+results.
+
+=== Earlier baseline receipt
+
 https://github.com/hyperpolymath/residual-evidence-types/actions/runs/38303561291[GitHub Actions run 38303561291]
-for commit `97244f5cb63bd6697caff261b187b62e9788b692`. It covers the core,
+checked commit `97244f5cb63bd6697caff261b187b62e9788b692`. It covers the core,
 nine core rejections, the original sibling comparisons and the explorer
 correspondence. It predates the expanded sibling comparisons below.
-
-*The sibling composition, coarsening, non-vacuity, retraction and revision
-extensions, and their additional rejection controls, await a hosted receipt
-for their own commit.* The inventories below distinguish that implemented
-scope from the earlier verified results.
 
 === Earlier milestone receipt
 
@@ -68,10 +86,30 @@ action beyond `actions/checkout`.
 
 == Local verification
 
-For the earlier verified scope, Agda 2.6.4.3 accepts every module with
-`--safe --without-K --no-libraries --ignore-interfaces`.
+Local checks on 2026-11-03 used Agda 2.6.4.3 with
+`--safe --without-K --no-libraries --ignore-interfaces --double-check`.
+The core gate rejected all nine controls; the sibling gate accepted both
+positive comparisons and rejected all six controls after checking their
+prefixes. The explorer gate passed 11 tests, reproduced the 546-row table
+and accepted its correspondence by `refl`.
 The core modules use bundled builtins only. There are no postulates, unchecked
 termination overrides or holes in the accepted modules.
+
+Two additional *local* fault injections tested the sibling gate itself:
+
+[cols="2,3",options="header"]
+|===
+|Injected fault |Observed gate response
+|Replace a deliberately invalid declaration with a valid one
+|Failed because the expected-rejection module was accepted.
+|Introduce a type error in a helper before `invalid`
+|Failed while checking the supposedly valid prefix; the helper error did
+not count as rejection of `invalid`.
+|===
+
+Both mutations were restored, and the unchanged sibling gate passed again.
+These fault injections are local evidence; the hosted receipt above covers
+the restored source and its ordinary checks, not the mutation runs.
 
 === First milestone: presence without identification
 
@@ -301,15 +339,16 @@ warnings in the library's `Relation.Nullary.Decidable` concerning cubical
 transport computation. The check succeeds; no cubical-computation claim is made.
 |===
 
-=== Expanded comparisons: hosted verification pending
+=== Expanded comparisons
 
 The implementation targets
 https://github.com/hyperpolymath/nextgen-typing/issues/115[nextgen-typing#115,
-AC2 and AC3]. Each operation uses the actual pinned interface above.
+AC2 and AC3]. Each operation uses the actual pinned interface above and is
+covered by hosted run `41671834379` for the code tree recorded in the receipt.
 
 [cols="2,3",options="header"]
 |===
-|Implemented statement |Scope and retained premises
+|Checked statement |Scope and retained premises
 |`EchoComparison.compose-echo-claims`
 |Transports `ResidualEvidence.Composition.compose-claims` to evidence over
 `Echo.Echo`. The concatenated context needs its own inhabited `EchoCase`;
@@ -371,8 +410,8 @@ The runner first checks both positive comparisons. For every control it
 also checks the valid prefix before the final `invalid` declaration, then
 requires a type-error diagnostic inside that declaration. A helper failure,
 missing import, parse error, unresolved hole or prover crash is a gate
-failure. Logs go to ignored `_build/check-logs/`. These new controls need
-their own hosted receipt alongside the positive extensions.
+failure. Logs go to ignored `_build/check-logs/`. All six controls and their
+valid prefixes passed these checks in hosted run `41671834379`.
 
 === Reproducing the comparisons
 
@@ -412,8 +451,6 @@ is not identified here with Echo's function-composition isomorphism.
   of the Echo and Epistemic foundations. The expanded comparisons address
   specific transport and non-vacuity obligations, while the family-or-view
   decision and the dependence theorem against the local record remain open.
-* A hosted verification receipt for the expanded comparisons and their
-  rejection controls.
 
 The imported assessment and explorer remain unchanged. Their historical
 claims about the separate starter package are not verification receipts for

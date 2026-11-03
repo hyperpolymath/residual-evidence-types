@@ -16,13 +16,16 @@ dependency-preserving composition, evidence revision and retraction, and a
 certified finite checker proved to agree with the explorer on all 546
 configurations. See link:../PROOF-STATUS.adoc[the verification record].
 
-*Sibling extensions implemented, hosted verification pending (2026-11-03):*
+*Sibling extensions checked (2026-11-03):*
 composition and coarsening over the actual Echo fibre, and non-vacuity,
 constructive retraction and revision through the actual Epistemic warrant
 interface. The corresponding rejection controls run through
-`just check-siblings`. These target
+`just check-siblings`. Both positive modules and all six controls passed
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41671834379[hosted run 41671834379]
+for PR head `05a92c2`; link:../PROOF-STATUS.adoc[the receipt] records its exact
+checkout and code tree. These address
 https://github.com/hyperpolymath/nextgen-typing/issues/115[nextgen-typing#115,
-AC2 and AC3]; their own hosted receipt must establish acceptance.
+AC2 and AC3].
 
 == Start with presence without identification
 

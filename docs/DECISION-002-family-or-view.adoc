@@ -47,8 +47,11 @@ re-proved against this repo's own record (the mirror is the same shape;
 `EchoComparison` now transports residual context composition and observation
 coarsening through `Echo.Echo`. `EpistemicComparison` transports retained
 claims through retraction and revision into `SoundWarrant`, and measures
-non-vacuity for its residual evidence type. These extensions await their
-own hosted receipt in link:../PROOF-STATUS.adoc[PROOF-STATUS].
+non-vacuity for its residual evidence type. These extensions and their
+rejection controls passed
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41671834379[hosted run 41671834379]
+for PR head `05a92c2`; link:../PROOF-STATUS.adoc[PROOF-STATUS] records the
+exact checkout and matching code tree.
 
 This is progress on the connection obligations in
 https://github.com/hyperpolymath/nextgen-typing/issues/115[nextgen-typing#115].

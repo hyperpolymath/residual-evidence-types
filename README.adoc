@@ -79,9 +79,11 @@ additional interface.
 
 2026-11-03: the sibling comparisons now include composition and coarsening
 over `Echo.Echo`, and non-vacuity, retraction and revision through the actual
-Epistemic `SoundWarrant` interface. These extensions and their rejection
-controls await their own hosted verification receipt in
-link:PROOF-STATUS.adoc[Proof status]. They address
+Epistemic `SoundWarrant` interface. These extensions and all six sibling
+rejection controls passed
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41671834379[hosted run 41671834379]
+for PR head `05a92c2`; link:PROOF-STATUS.adoc[Proof status] records the exact
+checkout, matching code tree and scope. They address
 https://github.com/hyperpolymath/nextgen-typing/issues/115[nextgen-typing#115,
 AC2 and AC3]. Transporting these operations does not establish that every
 residual law is an instance of a sibling law or settle the family-or-view
@@ -89,11 +91,10 @@ decision.
 
 The imported assessment and explorer are preserved unchanged. The assessment
 reports a separate starter archive that has not been recovered here. The
-`src/` core and `tests/` comparisons are *new work*. The earlier verified
-scope is recorded against Agda 2.6.4.3 under `--safe --without-K` in
-link:PROOF-STATUS.adoc[the hosted receipts]; the new extensions are identified
-separately. They do not reproduce or authenticate the missing archive's
-claimed results.
+`src/` core and `tests/` comparisons are *new work*. Their verified scope and
+exact revisions are recorded against Agda 2.6.4.3 under `--safe --without-K`
+in link:PROOF-STATUS.adoc[the hosted receipts]. They do not reproduce or
+authenticate the missing archive's claimed results.
 
 link:PROOF-STATUS.adoc[Proof status and reproducible commands] lists every
 verified result, the nine core rejection controls and the additional sibling
