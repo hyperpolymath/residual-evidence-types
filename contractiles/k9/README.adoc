@@ -63,11 +63,21 @@ stages and table size. Configured command strings are never executed. These
 are bounded source-shape checks; they do not establish that the proof scripts
 have executed or that their proofs pass.
 
-Three isolated negative controls run with the gate: Nickel must reject a
+The helper derives its repository boundary from its own module location.
+Its CLI accepts no repository, document, verdict or output paths. Evaluated
+data and verdicts come from fixed log filenames, and generated fixtures and
+drivers stay in temporary directories under `_build/k9-tools/`. Relative
+paths must remain within their selected boundary, and symbolic links in any
+existing path segment are rejected before access. The shell checks cache and
+log paths through the same helper before opening them.
+
+Three semantic negative controls run with the gate: Nickel must reject a
 configured safety-flag omission at `K9-N001` / L2; the checkout comparison must
 reject a removed core safety flag; and it must reject a missing core rejection
-control. Each negative control must fail for its intended reason. The
-repository's own files are not changed by these controls. Logs and the
+control. Two additional path controls reject parent traversal and symbolic-link
+parents for both reads and writes. Each negative control must fail for its
+intended reason. All fixtures are isolated in the ignored cache; the
+repository's source files are not changed by these controls. Logs and the
 evaluated configuration are written under `_build/check-logs/contract/`.
 
 To invoke the canonical validator directly with an existing toolchain:

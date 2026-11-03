@@ -37,8 +37,11 @@ validator_rel=1-formats/k9/tools/k9-validate.sh
 contract_rel=1-formats/k9/spec/contract/k9_contract.ncl
 component=contractiles/k9/proof-validation.k9.ncl
 logs="$PWD/_build/check-logs/contract"
-mkdir -p "$cache" "$logs"
+# Validate all existing path segments before creating directories or opening
+# logs. The helper derives its repository from import.meta.url, not CLI paths.
+"$bun" scripts/check-contract.js prepare "$standards_rev" "$nickel_version"
 tempdir="$(mktemp -d "$cache/check.XXXXXX")"
+temporary="${tempdir##*/}"
 trap 'rm -rf -- "$tempdir"' EXIT
 
 # Check every cached asset before use. A damaged cache fails closed rather
@@ -114,7 +117,7 @@ fi
 # repeat its contract application while exporting the exact data we consume.
 sed '1s/^K9!$/# K9! envelope removed for Nickel/' "$component" > "$tempdir/body.ncl"
 "$bun" scripts/check-contract.js write-driver \
-  "$standards/$contract_rel" "$tempdir/body.ncl" "$tempdir/driver.ncl"
+  "$temporary" "$standards_rev"
 if ! timeout 60s "$nickel" export --format json "$tempdir/driver.ncl" \
      > "$logs/evaluated.json" 2> "$logs/export.log"; then
   cat "$logs/export.log" >&2
@@ -123,18 +126,17 @@ if ! timeout 60s "$nickel" export --format json "$tempdir/driver.ncl" \
 fi
 
 "$bun" scripts/check-contract.js check \
-  --root "$PWD" --document "$logs/evaluated.json" --verdict "$logs/canonical.json" \
   --standards-revision "$standards_rev" --nickel-version "$nickel_version" \
   --nickel-sha256 "$nickel_sha256" --regression
 
 # Negative semantic fixture: remove --safe from the configured value while
 # retaining the predicate that requires it. Require the canonical Nickel
 # contract error, not a parse error, missing tool, earlier layer or timeout.
-"$bun" scripts/check-contract.js make-negative "$component" "$tempdir/without-safe.k9.ncl"
+"$bun" scripts/check-contract.js make-negative "$temporary"
 status=0
 timeout 60s bash "$standards/$validator_rel" \
   --nickel "$nickel" --strict --layer L2 --json -- "$tempdir/without-safe.k9.ncl" \
   > "$logs/without-safe.json" 2> "$logs/without-safe.log" || status=$?
-"$bun" scripts/check-contract.js assert-negative "$status" "$logs/without-safe.json"
+"$bun" scripts/check-contract.js assert-negative "$status"
 
 echo 'PASS: proof configuration, checkout consistency and targeted rejection controls (proof execution is separate)'

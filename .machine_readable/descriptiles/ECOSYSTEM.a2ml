@@ -2,10 +2,10 @@
 # SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
 [metadata]
 project = "residual-evidence-types"
-last-updated = "2026-09-09"
+last-updated = "2026-11-03"
 
 [relationships]
 coordinator = "hyperpolymath/nextgen-typing"
-echo = "Actual fibre-packaging round trips checked in tests/integration/EchoComparison.agda"
-epistemic = "Actual SoundWarrant interface checked in tests/integration/EpistemicComparison.agda"
-scope = "Narrow interface comparisons only; no general composition or explorer certification"
+echo = "Actual Echo.Echo fibre-packaging round trips and transport of residual composition and coarsening in tests/integration/EchoComparison.agda"
+epistemic = "Specific SoundWarrant non-vacuity and retained-support retraction/revision with explicit actual-world premises in tests/integration/EpistemicComparison.agda; arbitrary Epi tokens remain non-factive"
+scope = "Sibling transport compatibility; certified finite checker and explorer correspondence over 546 configurations of the declared signed-integer model. The family-or-view decision and local dependence theorem remain open"

@@ -2,22 +2,36 @@
 # SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
 [metadata]
 project = "residual-evidence-types"
-last-updated = "2026-09-09"
+last-updated = "2026-11-03"
 status = "work-in-progress"
 
 [implemented]
 core = "Builtins-only Agda: candidates, inhabited cases, universal claims, identification, refinement and actual-world soundness"
+contexts = "Assumption contexts and order-preserving thinnings"
+composition = "Dependency-preserving claim composition with an inhabited joint case, plus observation coarsening"
+revision = "Constructive evidence retraction and revision with explicit retained support"
+finite-checker = "Certified checker for the explorer's signed-integer model, with explicit in-range and actual-world premises"
 example = "Natural-number presence without identification for u+n=2 and n<=1"
-explorer = "Imported standalone finite signed-integer JavaScript model"
+explorer = "Imported finite signed-integer JavaScript model with proved checker correspondence over all 546 enumerated configurations"
 
 [local-verification]
 agda = "2.6.4.3"
-options = ["--safe", "--without-K", "--no-libraries", "--ignore-interfaces"]
+options = ["--safe", "--without-K", "--no-libraries", "--ignore-interfaces", "--double-check"]
 core = "passed"
-expected-rejections = ["FalsePresence", "FalseIdentification", "InconsistentCase"]
+expected-rejections = ["FalseCoarsening", "FalseFiniteEntailment", "FalseFiniteSoundness", "FalseIdentification", "FalseIntEquality", "FalsePresence", "FalseRetraction", "FalseWeakening", "InconsistentCase"]
 echo-comparison = "passed; stdlib 2.1 emits UnsupportedIndexedMatch cubical-compatibility warnings"
 epistemic-comparison = "passed"
+expected-sibling-rejections = ["FalseEchoCoarsening", "FalseEchoComposition", "FalseEpistemicActualWorld", "FalseEpistemicNonVacuity", "FalseEpistemicRetraction", "FalseEpistemicRevision"]
+sibling-valid-prefixes = "all six accepted independently before checking the intended rejection"
+explorer-tests = 11
+correspondence = "546 generated rows matched byte for byte; checker-matches-explorer accepted by refl"
 receipt = "PROOF-STATUS.adoc"
+dashboard = "tests/DASHBOARD.adoc"
+
+[hosted-verification]
+run = "https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41674253389"
+head = "6fe57a2f59347c5feec1a2eb5a1c478f5ef2e095"
+scope = "Successful proof and test receipt for the cited code tree; later changes require fresh verification"
 
 [pending]
-obligations = ["dependency-preserving composition", "evidence revision and retraction", "certified finite checker", "explorer correspondence", "causal specialisation"]
+obligations = ["causal models, source identification and confounding semantics", "probability or uncertainty distributions", "dependence theorem against the local record", "family-or-view decision beyond the checked sibling transports"]

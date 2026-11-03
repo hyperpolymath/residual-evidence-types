@@ -52,13 +52,42 @@ evidence are recorded below; the shared recommendations remain visible.
 |===
 
 The newer published audit is pinned to
-`hyperpolymath/cicd-suite@de35c57b3f21659d7fc1d42757e20e9e7345d268`.
+`hyperpolymath/cicd-suite@20fb1b1210f3155be6e11e8eac670dcbf795e657`.
 It reports five component jobs, pins Ubuntu 24.04, and removes old placeholder
 gates that reported success without running their tools. The caller retains
-its generated dependency lock. That published revision still contains the
-badge and metrics defects described here; their separate upstream repair
-must be merged and the consumer deliberately repinned before they disappear
-from this repository's hosted audit.
+its generated dependency lock. That revision includes the merged
+https://github.com/hyperpolymath/cicd-suite/pull/75[upstream advisory repair]:
+actual tracked Idris files determine language-specific advice, and missing
+scanner logs or proof receipts are explicitly not assessed. The workflow pin
+selects that published repair; a successful hosted run remains the evidence
+that this consumer executed it.
+
+== Legacy descriptile migration debt
+
+The two legacy descriptiles, `STATE.a2ml` and `ECOSYSTEM.a2ml`, retain their
+filenames. Their facts were refreshed on 2026-11-03: contexts, composition,
+revision, the finite checker and the 546-configuration explorer correspondence
+are implemented, alongside the expanded sibling transports. The recorded
+proof evidence is
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41674253389[run 41674253389],
+head `6fe57a2f59347c5feec1a2eb5a1c478f5ef2e095`; it does not establish the
+still-open family-or-view decision or the local dependence theorem.
+
+An extension-only rename would produce invalid DEED. The pinned
+https://github.com/metadatastician/standards/blob/d3e4b485a2af90c92a8e18af0888cd19cb132cd9/1-formats/deed/spec/abnf/deed.abnf[canonical grammar]
+requires S-expressions, `;; SPDX-...` headers, a document head and
+`:schema-version`, with filename-based form selection. The existing
+`[section]` and `key = value` syntax, and the standalone names `STATE.deed`
+and `ECOSYSTEM.deed`, do not meet those rules.
+
+At that same standards revision, the
+https://github.com/metadatastician/standards/blob/d3e4b485a2af90c92a8e18af0888cd19cb132cd9/1-formats/deed/mappings/state-v1-decision.adoc[STATE mapping decision]
+still requires a ruling on how to separate state from journal history. The
+https://github.com/metadatastician/standards/blob/d3e4b485a2af90c92a8e18af0888cd19cb132cd9/1-formats/deed/mappings/meta-ecosystem-to-repo-deed.adoc[ECOSYSTEM mapping]
+targets a clause in the repository's `<canonical-name>_chora.deed` and
+rejects untabled fields; it does not yet map this repository's custom
+`[relationships]` fields. The factual refresh therefore leaves the legacy
+format as explicit migration debt.
 
 == Accreditation and identity evidence
 
