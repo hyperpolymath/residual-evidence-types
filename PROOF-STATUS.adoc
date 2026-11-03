@@ -452,7 +452,10 @@ is not identified here with Echo's function-composition isomorphism.
   specific transport and non-vacuity obligations, while the family-or-view
   decision and the dependence theorem against the local record remain open.
 
-The imported assessment and explorer remain unchanged. Their historical
-claims about the separate starter package are not verification receipts for
-this repository. The CI workflow repeats this repository's actual checks;
-its run status must be consulted separately from local verification.
+The imported assessment's content is preserved in
+link:residual-evidence-assessment.adoc[its AsciiDoc migration], whose
+provenance note links the original Markdown at the immutable import commit.
+The explorer remains unchanged. Their historical claims about the separate
+starter package are not verification receipts for this repository. The CI
+workflow repeats this repository's actual checks; its run status must be
+consulted separately from local verification.

@@ -1,0 +1,150 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+= Test and benchmark dashboard
+:revdate: 2026-11-03
+:toc:
+
+This dashboard groups recorded proof and test results by category and keeps
+their history. It is an evidence index for the cited revisions, not a live
+CI status page. The theorem inventory, assumptions and source pins are in
+link:../PROOF-STATUS.adoc[PROOF-STATUS].
+
+== Latest recorded proof run
+
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41674253389[Agda proofs run 41674253389]
+completed successfully on 2026-11-03 at 16:29:51 UTC for
+https://github.com/hyperpolymath/residual-evidence-types/pull/23[PR #23],
+head `6fe57a2f59347c5feec1a2eb5a1c478f5ef2e095`.
+The merged main commit `69a4637273d0ebbb47813f749f30463a4b867893` and that
+head have the same Git tree, `ba6af2b42784ec80f8fd4ece9e6ed29710c4570b`.
+This is evidence for that code tree; later changes require fresh checks.
+
+The workflow uses Agda 2.6.4.3, Agda stdlib 2.1 for Echo, and bun 1.3.14
+for the explorer harness. Agda checks use
+`--safe --without-K --no-libraries --ignore-interfaces --double-check`.
+The sibling sources and standard library are pinned by full commit in
+link:../scripts/fetch-siblings.sh[fetch-siblings.sh].
+
+[cols="2,2,4",options="header"]
+|===
+|Category |Recorded result |Scope and reproduction
+|Core proof modules
+|`ResidualEvidence.All` accepted
+|The core contains 13 Agda source files, including the aggregate module and
+prelude. They cover candidates, contexts, composition, revision, the finite
+checker and worked examples. Run `just check`.
+|Core rejection controls
+|9 expected rejections
+|All deliberately invalid modules under `tests/reject/` were rejected with
+the required diagnostic shape. Run `just check`.
+|Actual sibling interfaces
+|2 positive comparison modules accepted
+|`EchoComparison` and `EpistemicComparison` import the pinned sibling
+sources. Run `just check-siblings`.
+|Sibling rejection controls
+|6 expected rejections; 6 valid prefixes accepted
+|Composition, coarsening, non-factivity, actual-world premises, retraction
+and revision controls must fail inside their final `invalid` declaration.
+Each prefix is checked independently first. Run `just check-siblings`.
+|Explorer harness
+|11 tests passed; 0 failed
+|The harness reads the model from the explorer and checks known answers,
+configuration order and generated table shape. Run `just correspondence`.
+|Explorer table and proof correspondence
+|546 configurations matched; equality accepted by `refl`
+|The regenerated table matched its committed copy byte for byte, then Agda
+accepted `Correspondence.checker-matches-explorer`. Run `just correspondence`.
+|===
+
+These categories count different things: source files, rejected invalid
+claims, executable tests and finite configurations. They are not combined
+into one test count or a proof-completeness percentage. The finite
+correspondence concerns the explorer's declared signed-integer model;
+actual-world applications retain their explicit evidence assumptions.
+
+== Local checks of the rejection gate
+
+On 2026-11-03, two temporary faults tested the sibling gate's behaviour:
+
+[cols="2,3",options="header"]
+|===
+|Fault injected |Observed response
+|Make an expected-rejection declaration valid
+|The gate failed because Agda accepted the deliberately invalid module.
+|Break a helper before the `invalid` declaration
+|The valid-prefix check failed. The helper error did not masquerade as the
+intended rejection.
+|===
+
+Both changes were restored and the unmodified sibling gate passed again.
+These were local fault-injection checks, recorded in
+link:../PROOF-STATUS.adoc[PROOF-STATUS], and are not claimed as hosted mutation
+tests in the run above.
+
+== Performance benchmark status
+
+There is no dedicated performance benchmark harness or measured baseline
+for latency, throughput or memory use in this repository. The counts above
+describe correctness checks and their finite scope. GitHub Actions elapsed
+time and the historical proof-run timings are not reproducible performance
+benchmarks, so no speed, resource-efficiency or regression threshold is
+claimed here.
+
+A future benchmark would need a specified workload, toolchain and hardware,
+an explicit cache policy, repeated measurements and retained raw results
+before this section could report performance comparisons.
+
+== Verification history
+
+Each row links a successful proof workflow and its associated commit. The
+history records changes in verified scope rather than a performance trend.
+
+[cols="1,1,1,4",options="header"]
+|===
+|Date |Commit |Proof run |Recorded scope
+|2026-09-09
+|https://github.com/hyperpolymath/residual-evidence-types/commit/4325198c10e2e689f084c2f64a27213685a1ffd2[4325198]
+|https://github.com/hyperpolymath/residual-evidence-types/actions/runs/34400282291[34400282291]
+|First presence-without-identification milestone, original interface
+comparisons and 3 rejection controls.
+|2026-09-22
+|https://github.com/hyperpolymath/residual-evidence-types/commit/938a7a5764ac18f08b1b7f332378b4d29c32aa37[938a7a5]
+|https://github.com/hyperpolymath/residual-evidence-types/actions/runs/35781018563[35781018563]
+|First milestone rechecked after the Echo and Epistemic source pins were
+refreshed; the pin history is retained in PROOF-STATUS.
+|2026-09-30
+|https://github.com/hyperpolymath/residual-evidence-types/commit/befdf9641c1bc6ecf58946e5ccbd0c630f4fc4c3[befdf96]
+|https://github.com/hyperpolymath/residual-evidence-types/actions/runs/36740394802[36740394802]
+|Contexts, composition, revision, finite checker and explorer correspondence;
+9 core rejections, 11 harness tests and 546 corresponding configurations.
+|2026-11-03
+|https://github.com/hyperpolymath/residual-evidence-types/commit/05a92c25df1b6617a264ce1040fca39de71b51c6[05a92c2]
+|https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41671834379[41671834379]
+|Expanded Echo and Epistemic comparisons, with 6 sibling rejection controls
+and independently checked prefixes, alongside the existing core and explorer
+checks. The exact merge checkout is recorded in PROOF-STATUS.
+|2026-11-03
+|https://github.com/hyperpolymath/residual-evidence-types/commit/6fe57a2f59347c5feec1a2eb5a1c478f5ef2e095[6fe57a2]
+|https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41674253389[41674253389]
+|Same proof/test scope rechecked at the final PR #23 head; its tree matches
+merged main `69a4637` as recorded above.
+|===
+
+== Running the recorded checks
+
+[source,bash]
+----
+just check
+just check-siblings
+just correspondence
+----
+
+`just check-all` combines the first two commands; correspondence remains a
+separate command. Without Just, invoke `bash scripts/check.sh`,
+`bash scripts/check-siblings.sh` and `bash scripts/correspondence.sh`.
+The sibling gate needs Git access to the pinned source revisions;
+correspondence needs bun. Logs are written beneath ignored `_build/`.
+
+Update this dashboard when the verified scope changes, using an actual
+successful run and its exact revision. Keep older receipts as history and
+report missing measurements as missing measurements.

@@ -16,19 +16,38 @@ Research material for *evidence-indexed residual types*: representing the
 alternative explanations compatible with an observation and its declared
 evidence, and keeping those evidence obligations attached to claims.
 
+== Tests and benchmark status
+
+link:tests/DASHBOARD.adoc[Test and benchmark dashboard] records the results
+by category and their history: 9 core rejection controls, 2 actual sibling
+comparisons, 6 sibling rejection controls with independently checked
+prefixes, 11 explorer tests and correspondence over 546 configurations.
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41674253389[Proof run 41674253389]
+passed for PR head `6fe57a2`, whose code tree matches merged main `69a4637`.
+Performance benchmarks have no measured baseline; these are correctness
+checks, not latency, throughput or memory measurements.
+
+link:docs/ESTATE-AUDIT.adoc[Estate audit findings and scope] explains the
+repository checks, outstanding shared-check defects and the separate
+scanner startup blocker. Maintainer and project references are in
+link:humans.txt[humans.txt] and link:trust.txt[trust.txt].
+
 The repository's canonical name is `hyperpolymath/residual-evidence-types`.
 The imported assessment uses the earlier proposed name `residual-evidence`;
-it is preserved unchanged as a source document.
+its historical content is preserved in the migrated AsciiDoc source document.
 
 == Imported material
 
 Both source files were copied unchanged from the author's Windows Downloads
-folder on 2026-09-09.
+folder on 2026-09-09. The assessment's formatting was migrated to AsciiDoc
+on 2026-11-03, preserving its wording, citations, equations, table and code
+example. Its provenance note links the original Markdown at the immutable
+import commit. The explorer remains unchanged.
 
 [cols="1,3",options="header"]
 |===
 |File |Contents
-|link:residual-evidence-assessment.md[Assessment and starting plan]
+|link:residual-evidence-assessment.adoc[Assessment and starting plan]
 |Research judgement, candidate-world formulation, prior-work references,
 worked example, proof ladder, and proposed implementation direction.
 |link:residual-evidence-explorer.html[Finite explorer]
@@ -89,8 +108,9 @@ AC2 and AC3]. Transporting these operations does not establish that every
 residual law is an instance of a sibling law or settle the family-or-view
 decision.
 
-The imported assessment and explorer are preserved unchanged. The assessment
-reports a separate starter archive that has not been recovered here. The
+The imported assessment's content is preserved through its format migration;
+the explorer remains unchanged. The assessment reports a separate starter
+archive that has not been recovered here. The
 `src/` core and `tests/` comparisons are *new work*. Their verified scope and
 exact revisions are recorded against Agda 2.6.4.3 under `--safe --without-K`
 in link:PROOF-STATUS.adoc[the hosted receipts]. They do not reproduce or

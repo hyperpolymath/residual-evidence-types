@@ -2,6 +2,10 @@
 # SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
+# Evaluate the Yard K9 proof configuration and check it against this checkout.
+check-contract:
+    bash scripts/check-contract.sh
+
 # Core proofs and semantic expected-rejection controls (Agda builtins only).
 check:
     bash scripts/check.sh

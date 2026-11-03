@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: CC-BY-SA-4.0
+# SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+# Project ownership and verification references, not a certification statement.
+
+Project: Residual Evidence Types
+Source Code: https://github.com/hyperpolymath/residual-evidence-types
+Issue Tracker: https://github.com/hyperpolymath/residual-evidence-types/issues
+Maintainer: Jonathan D.A. Jewell
+Maintainer Profile: https://github.com/hyperpolymath
+Identity Source: https://github.com/hyperpolymath/residual-evidence-types/blob/main/docs/MAINTAINERS.adoc
+Governance: https://github.com/hyperpolymath/residual-evidence-types/blob/main/docs/GOVERNANCE.adoc
+Security Reporting: Follow the private-contact guidance in docs/MAINTAINERS.adoc.
+
+Code License: MPL-2.0
+Documentation License: CC-BY-SA-4.0
+License Details: https://github.com/hyperpolymath/residual-evidence-types/blob/main/README.adoc
+
+Verification Record: https://github.com/hyperpolymath/residual-evidence-types/blob/main/PROOF-STATUS.adoc
+Verification Workflow: https://github.com/hyperpolymath/residual-evidence-types/blob/main/.github/workflows/proofs.yml
+Verification Scope: Model-relative Agda results and the explicitly documented finite explorer correspondence.
+Verification Provenance: Consult each receipt's hosted run and checked commit; a receipt does not verify later revisions automatically.
+
+Identity Assurance: Self-published repository attribution; no independent identity verification is asserted by this file.
+Certification Claims: This file makes no claim of third-party certification or repository-wide security assurance.
