@@ -17,9 +17,9 @@ on:
 
 jobs:
   call-estate-audit:
-    # Published cicd-suite main, 2026-11-02. Five separately reported
-    # components use Ubuntu 24.04 and omit the old gates that claimed success
-    # without running their tools. Keep the complete transitive actions.lock;
-    # update it with gh actions-lock when this immutable reference changes.
+    # Published cicd-suite main, 2026-11-03, including the merged advisory
+    # evidence repair. Five components use Ubuntu 24.04 and omit old gates
+    # that claimed success without running their tools. Keep the generated
+    # actions.lock and verify it when this immutable reference changes.
     # Advisory findings remain advisory, not proof or accreditation receipts.
-    uses: hyperpolymath/cicd-suite/.github/workflows/main-estate-audit.yml@de35c57b3f21659d7fc1d42757e20e9e7345d268
+    uses: hyperpolymath/cicd-suite/.github/workflows/main-estate-audit.yml@20fb1b1210f3155be6e11e8eac670dcbf795e657
