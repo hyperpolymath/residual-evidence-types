@@ -85,15 +85,15 @@ let exactly = fun expected =>
       rejection_directory | String | (exactly "tests/integration/reject")
         = "tests/integration/reject",
       expected_rejections | Array String
-        | (exactly ["FalseEchoCoarsening", "FalseEchoComposition", "FalseEpistemicActualWorld", "FalseEpistemicNonVacuity", "FalseEpistemicRetraction", "FalseEpistemicRevision"])
-        = ["FalseEchoCoarsening", "FalseEchoComposition", "FalseEpistemicActualWorld", "FalseEpistemicNonVacuity", "FalseEpistemicRetraction", "FalseEpistemicRevision"],
-      expected_rejection_count | Number | (exactly 6)
+    | (exactly ["FalseEchoCoarsening", "FalseEchoComposition", "FalseEpistemicActualWorld", "FalseEpistemicLocalRecovery", "FalseEpistemicNonVacuity", "FalseEpistemicRetraction", "FalseEpistemicRevision", "FalseEpistemicWitnessRecovery"])
+      = ["FalseEchoCoarsening", "FalseEchoComposition", "FalseEpistemicActualWorld", "FalseEpistemicLocalRecovery", "FalseEpistemicNonVacuity", "FalseEpistemicRetraction", "FalseEpistemicRevision", "FalseEpistemicWitnessRecovery"],
+    expected_rejection_count | Number | (exactly 8)
         = std.array.length expected_rejections,
       pins = {
         echo_types | String | (exactly "9c4b72b52972c7e084c8f569635eb01caef64e7a")
           = "9c4b72b52972c7e084c8f569635eb01caef64e7a",
-        epistemic_types | String | (exactly "dd948fbdddbdd06282cda8425e3e644e013c11ff")
-          = "dd948fbdddbdd06282cda8425e3e644e013c11ff",
+      epistemic_types | String | (exactly "6ce8c74e8a91e5021cb0c1fb4fc805bdff837178")
+        = "6ce8c74e8a91e5021cb0c1fb4fc805bdff837178",
         standard_library | String | (exactly "97bc55e47367c562b3032bf104f2a00b19716f88")
           = "97bc55e47367c562b3032bf104f2a00b19716f88",
       },

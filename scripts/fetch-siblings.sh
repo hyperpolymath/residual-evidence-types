@@ -25,5 +25,5 @@ fetch() {
 
 mkdir -p "$deps"
 fetch echo-types       hyperpolymath/echo-types      9c4b72b52972c7e084c8f569635eb01caef64e7a
-fetch epistemic-types  hyperpolymath/epistemic-types dd948fbdddbdd06282cda8425e3e644e013c11ff
+fetch epistemic-types  hyperpolymath/epistemic-types 6ce8c74e8a91e5021cb0c1fb4fc805bdff837178
 fetch standard-library agda/agda-stdlib              97bc55e47367c562b3032bf104f2a00b19716f88

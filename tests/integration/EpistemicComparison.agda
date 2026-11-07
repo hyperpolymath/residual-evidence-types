@@ -16,6 +16,8 @@ open import ResidualEvidence.Examples.Composition
 open import ResidualEvidence.Examples.Revision
   using (presence-rests-on-bound; drop-no-noise; to-balanced; balanced-ctx)
 open import EpistemicTypes.Warrant
+import EpistemicPartialRecovery
+import EpistemicPartialRecoveryExamples
 
 -- Imports the real sibling interface. The actual-world premises remain
 -- explicit; a token for a conditional claim alone cannot establish reality.
