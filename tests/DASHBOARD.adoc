@@ -1,13 +1,29 @@
 // SPDX-License-Identifier: CC-BY-SA-4.0
 // SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
 = Test and benchmark dashboard
-:revdate: 2026-11-03
+:revdate: 2026-11-07
 :toc:
 
 This dashboard groups recorded proof and test results by category and keeps
 their history. It is an evidence index for the cited revisions, not a live
 CI status page. The theorem inventory, assumptions and source pins are in
 link:../PROOF-STATUS.adoc[PROOF-STATUS].
+
+== Partial-recovery extension (2026-11-07)
+
+The optional Epistemic comparison now imports the actual partial-recovery
+interface from `epistemic-types` commit
+`6ce8c74e8a91e5021cb0c1fb4fc805bdff837178`. It adds fibre/candidate
+translations, source-separation and identification implications, and a
+decoder construction requiring an explicit image decision. Positive
+examples include a locally identified fibre in a retention that provably
+admits no global partial decoder. The sibling rejection inventory is now
+8 controls, each with an independently checked prefix. Local validation at
+implementation commit `686cafe2cba06666df4e4c0539fa43a69794447f` accepted both
+comparisons and all eight prefixes, rejected the eight invalid declarations,
+and passed the core, K9 configuration and explorer gates. These changes need
+their own hosted receipt; the historical results below cover only their
+cited trees.
 
 == Latest recorded proof run
 

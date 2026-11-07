@@ -121,6 +121,13 @@ verified result, the nine core rejection controls and the additional sibling
 controls, exact integration revisions and the standard-library warnings from
 the Echo comparison.
 
+The optional Epistemic comparison also relates source identification on an
+inhabited joint visible/residue fibre to the sibling's partial recovery
+interface. The converse construction explicitly requires an image decision
+procedure; projecting a case's consistency witness does not implement
+recovery from the pair. See the separate local partial-recovery inventory
+in link:PROOF-STATUS.adoc[the proof status].
+
 [source,bash]
 ----
 just check
