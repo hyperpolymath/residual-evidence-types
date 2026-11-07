@@ -29,7 +29,9 @@ nine core controls and all six sibling controls, and positively checked
 each sibling control's prefix before requiring failure at `invalid`.
 The explorer stage passed all 11 harness tests, matched all 546 generated
 rows byte for byte and accepted the correspondence theorem by `refl`.
-The sibling pins listed below were unchanged.
+The sibling pins at that receipt were unchanged. The Epistemic pin was
+subsequently advanced for the local partial-recovery comparison below;
+this older receipt does not cover that change.
 
 This receipt covers that exact code tree and the proof workflow. Later code
 changes need their own successful run; other CI integrations have separate
@@ -85,6 +87,72 @@ repository's Actions allow-list refuses, so every run from 2026-09-19 ended in
 action beyond `actions/checkout`.
 
 == Local verification
+
+=== Partial-recovery comparison (2026-11-07)
+
+The optional integration now imports the actual
+`EpistemicTypes.PartialRecovery` interface from `epistemic-types` commit
+`6ce8c74e8a91e5021cb0c1fb4fc805bdff837178` (merged PR #50). The Echo and
+standard-library pins are unchanged. This addition is separate from the
+hosted receipts above; it requires a fresh hosted run for its own tree.
+
+link:tests/integration/EpistemicPartialRecovery.agda[EpistemicPartialRecovery]
+uses the *joint visible/residue pair* as the residual observation. It proves:
+
+* a proof-relevant image witness and a candidate with trivial evidence
+  translate in both directions with pointwise inverse laws;
+* source separation identifies every candidate of any inhabited pair case,
+  including cases refined by additional evidence;
+* identification of *every* inhabited pair case with trivial evidence implies
+  source separation (identification of one refined case does not suffice);
+* an already supplied `PartialRecovery` identifies such cases and decodes
+  each candidate's pair to its source;
+* adding the separate `SuccessSound` law to that decoder provides an
+  `ImageDecision`, alongside identification of all inhabited pair cases;
+* identification of all those cases *plus an explicit `ImageDecision`*
+  constructs a partial decoder with the sibling's separate `SuccessSound`
+  law. Identification alone supplies no decision or search algorithm.
+
+`Case.witness` contains a source. Its projection supplies an identified
+value after separation is proved, but is not recovery from a pair alone.
+The bridge neither identifies an actual historical world without the
+usual observation/evidence premises nor establishes equality of evidence
+proofs or equality of functions.
+
+Agda also reports `UnsupportedIndexedMatch` warnings in the imported
+`EpistemicTypes.EchoBridge` arithmetic lemmas, in addition to the existing
+standard-library warnings in the Echo comparison. No computation under
+cubical transports is claimed by this integration.
+
+link:tests/integration/EpistemicPartialRecoveryExamples.agda[The examples]
+include executable recovery for an explicitly decided faithful retention,
+and a retention with a singleton fibre and a colliding fibre. The latter
+has a locally identified case and decidable image membership, but provably
+has no global `PartialRecovery`. Two new rejection controls attempt to
+project a chosen consistency witness as recovery and to promote a single
+identified case to the global identification premise. Their valid prefixes
+are checked before their final invalid declarations.
+
+Local validation on 2026-11-07 used Agda 2.6.4.3 and
+`--safe --without-K --no-libraries --ignore-interfaces --double-check`.
+At implementation commit `686cafe2cba06666df4e4c0539fa43a69794447f`:
+
+* `bash scripts/check-siblings.sh` accepted both positive comparisons and
+  all eight control prefixes, and rejected all eight controls at `invalid`.
+  This complete gate ran in a temporary Linux filesystem checkout of that
+  commit, after the initial Windows-mounted checkout proved slow.
+* `bash scripts/check.sh` accepted the unchanged core and rejected all
+  nine core controls.
+* `bash scripts/check-contract.sh` passed the K9 configuration agreement,
+  path-boundary and targeted rejection checks for the new pin and inventory.
+* `bash scripts/correspondence.sh` passed 11 harness tests, matched all 546
+  rows byte for byte, and accepted the correspondence theorem by `refl`.
+
+Logs are local evidence under ignored `_build/check-logs/`; this is not a
+hosted receipt. The following documentation-only commit records these
+results without changing the checked proof sources or proof configuration.
+
+=== Earlier local verification
 
 Local checks on 2026-11-03 used Agda 2.6.4.3 with
 `--safe --without-K --no-libraries --ignore-interfaces --double-check`.
@@ -313,7 +381,8 @@ successful expected rejection. Diagnostic logs go to ignored `_build/check-logs/
 
 These modules import the actual sibling sources, not local copies of their
 interfaces. The source revisions below are pinned in
-`scripts/fetch-siblings.sh` and are unchanged by the extended comparisons.
+`scripts/fetch-siblings.sh`. The 2026-11-07 partial-recovery comparison advances
+only the Epistemic revision; the earlier hosted revision is retained below.
 The original Echo receipt recorded `Echo.agda` with Git blob
 `86745cd6d6fd683bb11360f43b0b37da32033c6e` at the published revision below.
 The following table records the earlier hosted scope; the new statements
@@ -321,17 +390,18 @@ are inventoried separately afterwards.
 
 [cols="1,2,3",options="header"]
 |===
-|Interface |Pinned source |Earlier hosted scope
+|Interface |Current pinned source |Earlier hosted scope
 |Echo
 |`echo-types` commit `9c4b72b52972c7e084c8f569635eb01caef64e7a`
 |link:tests/integration/EchoComparison.agda[EchoComparison]: candidate worlds
 round-trip through evidence over `Echo.Echo`. This checks the fibre packaging,
 before the composition and coarsening extensions.
 |Epistemic
-|`epistemic-types` commit `dd948fbdddbdd06282cda8425e3e644e013c11ff`
+|`epistemic-types` commit `6ce8c74e8a91e5021cb0c1fb4fc805bdff837178`
 |link:tests/integration/EpistemicComparison.agda[EpistemicComparison]: a
 `SoundWarrant` whose evidence is a candidate-wide claim and whose conclusion
 requires explicit observation/evidence premises for the actual world.
+The earlier hosted receipt used `dd948fbdddbdd06282cda8425e3e644e013c11ff`.
 |Standard library for Echo
 |Agda stdlib 2.1, commit `97bc55e47367c562b3032bf104f2a00b19716f88`
 |Used only by the Echo integration. Agda emits `UnsupportedIndexedMatch`
@@ -344,7 +414,8 @@ transport computation. The check succeeds; no cubical-computation claim is made.
 The implementation targets
 https://github.com/hyperpolymath/nextgen-typing/issues/115[nextgen-typing#115,
 AC2 and AC3]. Each operation uses the actual pinned interface above and is
-covered by hosted run `41671834379` for the code tree recorded in the receipt.
+covered by hosted run `41671834379` at its earlier pins and code tree recorded
+in the receipt; the later partial-recovery extension is inventoried above.
 
 [cols="2,3",options="header"]
 |===
@@ -405,13 +476,18 @@ remain non-factive. These statements do not establish factivity of every
   arbitrary `Warrant`, which lacks the required soundness proof.
 * `FalseEpistemicActualWorld`: obtaining an actual-world conclusion without
   the actual world's required evidence.
+* `FalseEpistemicWitnessRecovery`: using a chosen consistency witness as
+  though it recovered another source with the same pair.
+* `FalseEpistemicLocalRecovery`: using one locally identified case in place
+  of identification of every inhabited pair case, even with an image decision.
 
 The runner first checks both positive comparisons. For every control it
 also checks the valid prefix before the final `invalid` declaration, then
 requires a type-error diagnostic inside that declaration. A helper failure,
 missing import, parse error, unresolved hole or prover crash is a gate
-failure. Logs go to ignored `_build/check-logs/`. All six controls and their
-valid prefixes passed these checks in hosted run `41671834379`.
+failure. Logs go to ignored `_build/check-logs/`. The original six controls
+and their valid prefixes passed in hosted run `41671834379`; the current
+inventory has eight controls and requires a fresh hosted run.
 
 === Reproducing the comparisons
 
