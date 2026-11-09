@@ -123,6 +123,13 @@ on cubical transports. No cubical computation is claimed. This is local
 evidence, not a hosted receipt. The hosted receipts above were made under
 `--safe --without-K` and are historical evidence for that profile only.
 
+The first hosted receipt for the new profile is
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/42637773663[Agda proofs run 42637773663].
+It passed "Core proofs, expected rejections and sibling comparisons" on
+2026-11-09 for PR #28 at head `44075dce332991d5e54371d1e14aa46132340b4b`. It
+covers that tree. Later commits, including the re-signed merge, need their
+own run.
+
 === Partial-recovery comparison (2026-11-07)
 
 The optional integration now imports the actual
