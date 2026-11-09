@@ -56,8 +56,8 @@ let exactly = fun expected =>
       debian_package_version | String | (exactly "2.6.4.3-1+b2")
         = "2.6.4.3-1+b2",
       flags | Array String
-        | (exactly ["--safe", "--without-K", "--no-libraries", "--ignore-interfaces", "--double-check"])
-        = ["--safe", "--without-K", "--no-libraries", "--ignore-interfaces", "--double-check"],
+        | (exactly ["--safe", "--without-K", "--cubical-compatible", "--no-libraries", "--ignore-interfaces", "--double-check"])
+        = ["--safe", "--without-K", "--cubical-compatible", "--no-libraries", "--ignore-interfaces", "--double-check"],
     },
 
     core = {

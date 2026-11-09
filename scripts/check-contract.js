@@ -140,7 +140,7 @@ function checkDocument(document, checkout, standardsRevision, nickelVersion, nic
     && specification.nickel_version === nickelVersion && specification.nickel_sha256 === nickelSha256,
   'configured standards or Nickel pins differ from the verified tools');
 
-  const requiredFlags = ['--safe', '--without-K', '--no-libraries', '--ignore-interfaces', '--double-check'];
+  const requiredFlags = ['--safe', '--without-K', '--cubical-compatible', '--no-libraries', '--ignore-interfaces', '--double-check'];
   const { agda, core, siblings, correspondence, evidence } = config;
   requireThat(equal(agda.flags, requiredFlags), 'configured Agda flags omit or alter a required check');
   requireThat(evidence.hosted_run_and_commit_required === true, 'hosted run and checked commit must remain required');
@@ -324,7 +324,7 @@ function main(mode, args) {
     requireThat(args.length === 1, 'make-negative requires temporary cache identifier');
     const temporary = temporaryCheckout(args[0]);
     const text = repository.read(componentPath);
-    const before = '        = ["--safe", "--without-K", "--no-libraries", "--ignore-interfaces", "--double-check"],';
+    const before = '        = ["--safe", "--without-K", "--cubical-compatible", "--no-libraries", "--ignore-interfaces", "--double-check"],';
     requireThat(text.split(before).length === 2, 'could not construct the missing-safety-flag fixture unambiguously');
     temporary.write('without-safe.k9.ncl', text.replace(before, before.replace('"--safe", ', '')));
     return;

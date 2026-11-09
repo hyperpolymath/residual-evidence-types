@@ -88,6 +88,41 @@ action beyond `actions/checkout`.
 
 == Local verification
 
+=== Canonical Agda profile (2026-11-09)
+
+PROOF-POLICY §2.1 (standards, owner ruling 2026-11-01) makes
+`agda --safe --without-K --cubical-compatible` the canonical invocation for
+first-party Agda theory proofs. Every gate now adds `--cubical-compatible`:
+`scripts/check.sh`, `scripts/check-siblings.sh`,
+`scripts/correspondence.sh`, the Justfile recipes, the library file and the
+K9 proof configuration, whose contract and targeted negative fixture now
+require it. The core, reject and correspondence modules declare it in
+their pragmas. The flag is coinfective: a module that declares it cannot
+import one that does not. Downstream developments that adopt the profile,
+such as MetaManifold-Evidence, therefore need this change first. The
+integration modules keep `--safe --without-K` in their pragmas because
+echo-types and epistemic-types do not declare the flag, and the sibling
+gate checks them under it from the command line.
+
+Local validation on 2026-11-09 used Agda 2.6.4.3 built from Hackage with
+GHC 9.4.7 (the Debian `agda-bin` package was not reachable from that
+session), Bun 1.3.14 and the sibling pins below, on base commit
+`5b36872ab68a07e923739323766306ff14cbbaa9` plus this change:
+
+* `bash scripts/check.sh` accepted the core and rejected all nine controls.
+* `bash scripts/check-siblings.sh` accepted both comparisons and all eight
+  control prefixes, and rejected all eight controls at `invalid`.
+* `bash scripts/correspondence.sh` matched the regenerated table byte for
+  byte and accepted the correspondence theorem by `refl`.
+* `bash scripts/check-contract.sh` passed, including the Nickel rejection of
+  a configuration missing a safety flag.
+
+Agda reports `UnsupportedIndexedMatch` warnings for clauses that rely on
+constructor injectivity (`suc`, `_∷_`). Those functions will not compute
+on cubical transports. No cubical computation is claimed. This is local
+evidence, not a hosted receipt. The hosted receipts above were made under
+`--safe --without-K` and are historical evidence for that profile only.
+
 === Partial-recovery comparison (2026-11-07)
 
 The optional integration now imports the actual

@@ -44,6 +44,6 @@ if ! diff -u tests/correspondence/ExplorerTable.agda "$fresh"; then
 fi
 echo 'PASS: committed table matches the explorer byte for byte'
 
-"$prover" --safe --without-K --no-libraries --ignore-interfaces --double-check \
+"$prover" --safe --without-K --cubical-compatible --no-libraries --ignore-interfaces --double-check \
   -i src -i tests/correspondence tests/correspondence/Correspondence.agda
 echo 'PASS: Checker.table ≡ ExplorerTable.expected by refl'

@@ -112,8 +112,10 @@ The imported assessment's content is preserved through its format migration;
 the explorer remains unchanged. The assessment reports a separate starter
 archive that has not been recovered here. The
 `src/` core and `tests/` comparisons are *new work*. Their verified scope and
-exact revisions are recorded against Agda 2.6.4.3 under `--safe --without-K`
-in link:PROOF-STATUS.adoc[the hosted receipts]. They do not reproduce or
+exact revisions are recorded against Agda 2.6.4.3 in
+link:PROOF-STATUS.adoc[the hosted receipts]. Receipts before the
+`--cubical-compatible` profile was adopted were made under
+`--safe --without-K` and are historical evidence for that profile only. They do not reproduce or
 authenticate the missing archive's claimed results.
 
 link:PROOF-STATUS.adoc[Proof status and reproducible commands] lists every

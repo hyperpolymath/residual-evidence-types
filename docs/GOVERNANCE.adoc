@@ -34,7 +34,7 @@ The maintainer:
 Contributors are expected to:
 
 * open an issue before a large change, so the direction can be agreed first;
-* keep every Agda module under `--safe --without-K` and add a shape-checked
+* keep every Agda module under `--safe --without-K --cubical-compatible` and add a shape-checked
   reject module under `tests/reject/` for each positive result;
 * update `PROOF-STATUS.adoc` when a theorem is added, weakened or removed;
 * keep documentation in AsciiDoc with an SPDX header on every file.
@@ -56,8 +56,11 @@ Contributors are expected to:
 
 == Proof discipline
 
-* Agda modules carry `{-# OPTIONS --safe --without-K #-}` and are checked with
-  `--double-check` inside a digest-pinned container.
+* Agda modules carry `{-# OPTIONS --safe --without-K --cubical-compatible #-}`
+  and are checked with `--double-check` inside a digest-pinned container.
+  Integration modules that import sibling sources keep
+  `--safe --without-K`, because the flag is coinfective and the siblings do
+  not declare it; the gate passes it on the command line for them.
 * Each positive module is paired with a reject module that must fail at a
   named location; a reject module that passes is a bug in the gate.
 * Postulates and holes are not merged.

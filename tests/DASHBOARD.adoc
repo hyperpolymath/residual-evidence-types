@@ -37,7 +37,7 @@ This is evidence for that code tree; later changes require fresh checks.
 
 The workflow uses Agda 2.6.4.3, Agda stdlib 2.1 for Echo, and bun 1.3.14
 for the explorer harness. Agda checks use
-`--safe --without-K --no-libraries --ignore-interfaces --double-check`.
+`--safe --without-K --cubical-compatible --no-libraries --ignore-interfaces --double-check`.
 The sibling sources and standard library are pinned by full commit in
 link:../scripts/fetch-siblings.sh[fetch-siblings.sh].
 
