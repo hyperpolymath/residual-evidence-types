@@ -39,7 +39,7 @@ jobs:
             "https://github.com/leanprover/lean4/releases/download/v${LEAN_VERSION}/lean-${LEAN_VERSION}-linux.tar.zst"
           echo "${LEAN_SHA256}  ${archive}" | sha256sum -c -
           mkdir -p "$RUNNER_TEMP/lean"
-          tar -xzf "$archive" -C "$RUNNER_TEMP/lean" --strip-components=1
+          tar --zstd -xf "$archive" -C "$RUNNER_TEMP/lean" --strip-components=1
           echo "$RUNNER_TEMP/lean/bin" >> "$GITHUB_PATH"
           "$RUNNER_TEMP/lean/bin/lean" --version
           "$RUNNER_TEMP/lean/bin/lake" --version
