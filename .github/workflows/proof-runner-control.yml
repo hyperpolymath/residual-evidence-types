@@ -1,0 +1,95 @@
+# SPDX-License-Identifier: MPL-2.0
+# Deliberately de-onboarded from actions.lock: the only action reference is a
+# cross-repository composite at an immutable full commit SHA.
+name: Proof runner controls
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/proof-runner-control.yml]
+  pull_request:
+    paths: [.github/workflows/proof-runner-control.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lean:
+    name: Lean proof-runner accepts valid and rejects invalid proofs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      # The suite proof-runner supports Idris2 and Lean only. This control uses
+      # a real Lean toolchain; it does not claim Agda or Coq execution.
+      - name: Install checksum-pinned Lean toolchain
+        env:
+          LEAN_VERSION: 4.24.0
+          LEAN_SHA256: b14f5e5159219dd1a1956c3b806813319f5e94ccd5bdfd56f54520609a5bb5ec
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y zstd
+          archive="$RUNNER_TEMP/lean-${LEAN_VERSION}-linux.tar.zst"
+          curl -fsSL --retry 3 --proto '=https' --tlsv1.2 -o "$archive" \
+            "https://github.com/leanprover/lean4/releases/download/v${LEAN_VERSION}/lean-${LEAN_VERSION}-linux.tar.zst"
+          echo "${LEAN_SHA256}  ${archive}" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/lean"
+          tar -xzf "$archive" -C "$RUNNER_TEMP/lean" --strip-components=1
+          echo "$RUNNER_TEMP/lean/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/lean/bin/lean" --version
+          "$RUNNER_TEMP/lean/bin/lake" --version
+
+      - name: Create valid and ill-typed Lean proof fixtures
+        run: |
+          set -euo pipefail
+          for fixture in proof-runner-passing proof-runner-failing; do
+            mkdir -p "$RUNNER_TEMP/$fixture"
+            cat > "$RUNNER_TEMP/$fixture/lakefile.toml" <<'EOF'
+          name = "proof_runner_control"
+          defaultTargets = ["ProofRunnerControl"]
+
+          [[lean_lib]]
+          name = "ProofRunnerControl"
+          EOF
+          done
+          cat > "$RUNNER_TEMP/proof-runner-passing/ProofRunnerControl.lean" <<'EOF'
+          theorem proof_runner_positive : 1 + 1 = 2 := rfl
+          EOF
+          cat > "$RUNNER_TEMP/proof-runner-failing/ProofRunnerControl.lean" <<'EOF'
+          theorem proof_runner_negative : 1 + 1 = 3 := rfl
+          EOF
+
+      - name: Execute valid Lean fixture
+        id: valid
+        uses: hyperpolymath/proven-cicd/actions/proof-runner-check@03e858b6015e67cc1f9bc31ac1e29ddc1b6fd409
+        with:
+          path: ${{ runner.temp }}/proof-runner-passing
+
+      - name: Execute ill-typed Lean fixture as a required negative control
+        id: invalid
+        continue-on-error: true
+        uses: hyperpolymath/proven-cicd/actions/proof-runner-check@03e858b6015e67cc1f9bc31ac1e29ddc1b6fd409
+        with:
+          path: ${{ runner.temp }}/proof-runner-failing
+
+      - name: Verify both proof-runner receipts
+        env:
+          VALID_OUTCOME: ${{ steps.valid.outcome }}
+          VALID_STATUS: ${{ steps.valid.outputs.status }}
+          INVALID_OUTCOME: ${{ steps.invalid.outcome }}
+          INVALID_STATUS: ${{ steps.invalid.outputs.status }}
+        run: |
+          set -euo pipefail
+          # A missing tool yields not_run/exit 2 and cannot satisfy either
+          # receipt. The negative step must fail because Lake rejected the
+          # fixture (failed/exit 1), not because the action was skipped.
+          test "$VALID_OUTCOME" = success
+          test "$VALID_STATUS" = passed
+          test "$INVALID_OUTCOME" = failure
+          test "$INVALID_STATUS" = failed
+          echo "Valid Lean fixture executed and passed; ill-typed Lean fixture executed and failed the gate."
