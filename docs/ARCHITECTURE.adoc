@@ -23,7 +23,7 @@ deliberately invalid companion modules.
 [source]
 ----
 .
-├── src/ResidualEvidence/            # the Agda development (--safe --without-K)
+├── src/ResidualEvidence/            # the Agda development (--safe --without-K --cubical-compatible)
 │   ├── Prelude.agda                 #   minimal logical vocabulary
 │   ├── Core.agda                    #   candidate worlds, evidence, claims
 │   ├── Context.agda                 #   contexts of assumptions and thinnings
@@ -41,7 +41,7 @@ deliberately invalid companion modules.
 ├── .machine_readable/               # machine-readable project descriptors
 ├── residual-evidence-explorer.html  # the finite explorer, kept as imported
 ├── residual-evidence-assessment.adoc # imported assessment; content preserved in AsciiDoc
-├── residual-evidence-types.agda-lib # library file: include src, --safe --without-K
+├── residual-evidence-types.agda-lib # library file: include src, --safe --without-K --cubical-compatible
 ├── Justfile                         # check, check-siblings, check-all, correspondence
 ├── PROOF-STATUS.adoc                # what is proved, with hosted-run receipts
 └── README.adoc
@@ -49,8 +49,8 @@ deliberately invalid companion modules.
 
 == The gate
 
-`scripts/check.sh` runs Agda 2.6.4.3 with `--safe --without-K --no-libraries
---ignore-interfaces --double-check` over `src/ResidualEvidence/All.agda`, so
+`scripts/check.sh` runs Agda 2.6.4.3 with `--safe --without-K --cubical-compatible
+--no-libraries --ignore-interfaces --double-check` over `src/ResidualEvidence/All.agda`, so
 every positive module is checked from source on every run. It then checks
 each module under `tests/reject/` and demands that Agda fail at a location
 inside that module with a `when checking that` explanation, so a reject
@@ -89,7 +89,11 @@ runs the composite checks under `.github/actions/`.
 
 == Design constraints
 
-* `--safe --without-K` everywhere; no postulates, no holes.
+* `--safe --without-K --cubical-compatible` everywhere (the estate's
+  canonical Agda profile, PROOF-POLICY §2.1); no postulates, no holes. The
+  integration modules keep `--safe --without-K` in their pragmas because
+  their sibling sources do not declare the flag; the gate passes it on the
+  command line, so they are checked under it too.
 * `Core.agda` and `Prelude.agda` change only together with the pinned
   receipts, because the integration modules open both.
 * A new result arrives as a positive module, a reject module and an entry in

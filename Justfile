@@ -12,11 +12,11 @@ check:
 
 # Check against the actual epistemic-types source directory supplied by the caller.
 check-epistemic epistemic_src:
-    agda --safe --without-K --no-libraries --ignore-interfaces --double-check -i src -i tests/integration -i '{{epistemic_src}}' tests/integration/EpistemicComparison.agda
+    agda --safe --without-K --cubical-compatible --no-libraries --ignore-interfaces --double-check -i src -i tests/integration -i '{{epistemic_src}}' tests/integration/EpistemicComparison.agda
 
 # Check against the actual echo-types source and Agda standard library.
 check-echo echo_src stdlib_src:
-    agda --safe --without-K --no-libraries --ignore-interfaces --double-check -i src -i tests/integration -i '{{echo_src}}' -i '{{stdlib_src}}' tests/integration/EchoComparison.agda
+    agda --safe --without-K --cubical-compatible --no-libraries --ignore-interfaces --double-check -i src -i tests/integration -i '{{echo_src}}' -i '{{stdlib_src}}' tests/integration/EchoComparison.agda
 
 # Fetch the pinned sibling revisions into _build/dependencies with plain git.
 fetch-siblings:

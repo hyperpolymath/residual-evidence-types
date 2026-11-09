@@ -36,8 +36,14 @@ head have the same Git tree, `ba6af2b42784ec80f8fd4ece9e6ed29710c4570b`.
 This is evidence for that code tree; later changes require fresh checks.
 
 The workflow uses Agda 2.6.4.3, Agda stdlib 2.1 for Echo, and bun 1.3.14
-for the explorer harness. Agda checks use
+for the explorer harness. That run checked with
 `--safe --without-K --no-libraries --ignore-interfaces --double-check`.
+The current gate adds `--cubical-compatible` (PROOF-POLICY §2.1). Its first
+hosted receipt is
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/42637773663[Agda proofs run 42637773663],
+which passed "Core proofs, expected rejections and sibling comparisons" on
+2026-11-09 for PR #28 at head `44075dce332991d5e54371d1e14aa46132340b4b`.
+The 2026-11-03 run above remains the receipt for the earlier profile.
 The sibling sources and standard library are pinned by full commit in
 link:../scripts/fetch-siblings.sh[fetch-siblings.sh].
 

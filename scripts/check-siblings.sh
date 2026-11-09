@@ -5,7 +5,7 @@ set -euo pipefail
 cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
 prover="${AGDA:-agda}"
 "$prover" --version
-flags=(--safe --without-K --no-libraries --ignore-interfaces --double-check -i src -i tests/integration)
+flags=(--safe --without-K --cubical-compatible --no-libraries --ignore-interfaces --double-check -i src -i tests/integration)
 echo_flags=(-i _build/dependencies/echo-types/proofs/agda -i _build/dependencies/standard-library/src)
 epi_flags=(-i _build/dependencies/epistemic-types/src)
 
