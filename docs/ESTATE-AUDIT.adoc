@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: CC-BY-SA-4.0
 // SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
 = Estate audit findings and scope
-:revdate: 2026-11-03
+:revdate: 2026-11-09
 
 The central estate audit is a collection of repository checks and advisory
 observations. A successful audit job does not establish every recommendation,
@@ -51,16 +51,43 @@ Idris extensions. No RSR accreditation is claimed.
 evidence are recorded below; the shared recommendations remain visible.
 |===
 
-The newer published audit is pinned to
-`hyperpolymath/cicd-suite@20fb1b1210f3155be6e11e8eac670dcbf795e657`.
-It reports five component jobs, pins Ubuntu 24.04, and removes old placeholder
-gates that reported success without running their tools. The caller retains
-its generated dependency lock. That revision includes the merged
+The current published audit is pinned to
+`hyperpolymath/proven-cicd@03e858b6015e67cc1f9bc31ac1e29ddc1b6fd409`,
+which is reachable from that repository's `main` branch. It reports five
+component jobs, pins Ubuntu 24.04, and removes old placeholder gates that
+reported success without running their tools. The caller retains its generated
+dependency lock; cross-repository reusable workflow calls are deliberately not
+lock dependencies. That revision includes the merged
 https://github.com/hyperpolymath/cicd-suite/pull/75[upstream advisory repair]:
 actual tracked Idris files determine language-specific advice, and missing
-scanner logs or proof receipts are explicitly not assessed. The workflow pin
-selects that published repair; a successful hosted run remains the evidence
-that this consumer executed it.
+scanner logs or proof receipts are explicitly not assessed.
+
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/42607780226[Run 42607780226]
+executed this caller at head `474de92d28a66085768afd4717c18eeb2d5de18a`.
+It created and passed `call-estate-audit / governance`, `hygiene`, `manifests`,
+`languages`, and `advisory`; it was not a zero-job startup result. Advisory
+findings remain observations, not proof or accreditation receipts.
+
+== Supported proof-runner controls
+
+The current suite's `proof-runner-check` supports Idris2 (`*.ipkg`) and Lean
+(`lakefile.lean` or `lakefile.toml`). It does not execute Agda or Coq, and the
+central estate audit does not invoke this action. The dedicated Agda workflow
+therefore remains separate evidence; an absent or unsupported prover is not a
+successful proof run.
+
+`.github/workflows/proof-runner-control.yml` installs a checksum-pinned Lean
+4.24.0 toolchain and exercises the suite action at the same commit as the
+estate caller. A valid Lean fixture must produce `status=passed`. An ill-typed
+fixture must make Lake and the action fail with `status=failed`; the enclosing
+control job passes only after checking both receipts. A `not_run` result,
+missing toolchain, or skipped action cannot satisfy those assertions.
+
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/42607779570[Run 42607779570]
+passed all of these steps. Its intentional annotations record `lake build`
+exiting 1 for the ill-typed fixture, while the valid fixture and final receipt
+checks passed. This is Lean evidence only, not a claim that the suite executed
+this repository's Agda sources.
 
 == Legacy descriptile migration debt
 
@@ -132,7 +159,7 @@ proof claims. Its regression tests include both this repository's merged
 tree and an actual Idris repository. It leaves the audit advisory and does
 not replace the dedicated Agda proof workflow.
 
-== Informational notices and the separate scanner error
+== Informational notices
 
 * The original "no K9 files" notice is addressed by the new component and
   its explicit evaluation step.
@@ -144,17 +171,27 @@ not replace the dedicated Agda proof workflow.
   label. The newer audit uses `ubuntu-24.04`; the proof job already does.
   See https://github.com/actions/runner-images/issues/14748[the runner announcement].
 
-The separate
+== Secret scanner startup repair
+
+The earlier
 https://github.com/hyperpolymath/residual-evidence-types/actions/runs/41674256829[Secret Scanner run 41674256829]
-did not execute. GitHub rejected its reusable workflow before startup:
+did not execute. GitHub rejected the following renamed reusable before startup
+because the selected-actions allow-list lacked that exact workflow:
 
 [source,text]
 ----
 metadatastician/standards/.github/workflows/secret-scanner-reusable.yml@74d2f66f575246cf6e313ae7775f44df6e097ff2
 ----
 
-The canonical repository owner changed, while the pinned scanner commit
-stayed the same. The selected-actions allow-list lacks that exact workflow.
-Repository-owner approval is required before adding it. No allow-list or
-token-permission setting was changed by this cleanup, and a blocked scan is
-not reported as a successful scan.
+The caller now uses the canonical
+`hyperpolymath/proven-cicd/.github/workflows/secret-scanner-reusable.yml` at
+`03e858b6015e67cc1f9bc31ac1e29ddc1b6fd409`. The job key remains `scan`,
+`fast-pr` remains false so pull requests retain full-history coverage, and no
+secrets are forwarded. No allow-list or token-permission setting was changed.
+
+https://github.com/hyperpolymath/residual-evidence-types/actions/runs/42607780236[Run 42607780236]
+created and passed `scan / gitleaks`, `scan / rust-secrets`, and
+`scan / shell-secrets`. Its gitleaks job resolved and checked out the exact
+caller pin, ran real detector controls, and scanned both the working tree and
+history. This supersedes the former zero-job startup failure without treating
+a blocked or skipped scan as a pass.
