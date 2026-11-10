@@ -195,3 +195,22 @@ created and passed `scan / gitleaks`, `scan / rust-secrets`, and
 caller pin, ran real detector controls, and scanned both the working tree and
 history. This supersedes the former zero-job startup failure without treating
 a blocked or skipped scan as a pass.
+
+== Suite repository move (2026-11-10)
+
+`hyperpolymath/proven-cicd` is being retired. Its commits, including
+`03e858b6015e67cc1f9bc31ac1e29ddc1b6fd409`, were merged into
+`hyperpolymath/proven-cicd-and-workflows`
+(https://github.com/hyperpolymath/proven-cicd-and-workflows/pull/95[#95]).
+The estate audit, the secret scanner and both proof-runner control steps now
+call `hyperpolymath/proven-cicd-and-workflows` at
+`1fd5e6371a50f0fc3687206a5adca0cdf7b39aa6`, the merge of
+https://github.com/hyperpolymath/proven-cicd-and-workflows/pull/94[#94].
+`03e858b` is an ancestor of that commit.
+
+At the new commit, `proof-runner-check` is unchanged. The secret scanner's
+caller check also admits the new repository name. The estate audit calls its
+gate actions under the new repository name at the same commits, adds an
+optional `zig-ffi-paths` input, and pins the Zig adapter gate at `3c2d402`;
+this repository tracks no Zig source. The runs cited in the sections above
+were made at the earlier pin and remain records of that pin only.
