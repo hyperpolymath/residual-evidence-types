@@ -17,10 +17,12 @@ on:
 
 jobs:
   call-estate-audit:
-    # Published proven-cicd main, 2026-11-07, including the merged advisory
-    # evidence repair. Five components use Ubuntu 24.04 and omit old gates
+    # proven-cicd-and-workflows at the #94 merge, 2026-11-10: the published
+    # proven-cicd main of 2026-11-07 (merged in #95), including the advisory
+    # evidence repair, plus the new-name admission and an optional
+    # zig-ffi-paths input. Five components use Ubuntu 24.04 and omit old gates
     # that claimed success without running their tools. Keep the generated
     # actions.lock and verify it when this immutable reference changes.
     # Advisory findings remain advisory, not proof or accreditation receipts.
     # This canonical coordinate also avoids reusable-workflow rename failures.
-    uses: hyperpolymath/proven-cicd/.github/workflows/main-estate-audit.yml@03e858b6015e67cc1f9bc31ac1e29ddc1b6fd409
+    uses: hyperpolymath/proven-cicd-and-workflows/.github/workflows/main-estate-audit.yml@1fd5e6371a50f0fc3687206a5adca0cdf7b39aa6

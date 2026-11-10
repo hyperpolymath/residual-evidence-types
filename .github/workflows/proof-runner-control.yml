@@ -66,14 +66,14 @@ jobs:
 
       - name: Execute valid Lean fixture
         id: valid
-        uses: hyperpolymath/proven-cicd/actions/proof-runner-check@03e858b6015e67cc1f9bc31ac1e29ddc1b6fd409
+        uses: hyperpolymath/proven-cicd-and-workflows/actions/proof-runner-check@1fd5e6371a50f0fc3687206a5adca0cdf7b39aa6
         with:
           path: ${{ runner.temp }}/proof-runner-passing
 
       - name: Execute ill-typed Lean fixture as a required negative control
         id: invalid
         continue-on-error: true
-        uses: hyperpolymath/proven-cicd/actions/proof-runner-check@03e858b6015e67cc1f9bc31ac1e29ddc1b6fd409
+        uses: hyperpolymath/proven-cicd-and-workflows/actions/proof-runner-check@1fd5e6371a50f0fc3687206a5adca0cdf7b39aa6
         with:
           path: ${{ runner.temp }}/proof-runner-failing
 
